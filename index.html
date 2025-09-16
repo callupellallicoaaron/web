@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Circuito Lúdico–Neuromotriz | Cartas + Simulación Grande</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Paleta clara, educativa y fresca */
+    --edu-bg:#f7fbff;          /* Fondo muy claro */
+    --edu-surface:#ffffff;     /* Tarjetas */
+    --edu-ink:#0b1324;         /* Texto principal */
+    --edu-muted:#486581;       /* Texto secundario */
+    --edu-primary:#2b7de9;     /* Azul educativo */
+    --edu-accent:#06b6d4;      /* Cian suave */
+    --edu-success:#22c55e;     /* Verde éxito */
+    --edu-danger:#ef4444;      /* Rojo dificultad */
+    --edu-border:#e6eef8;      /* Bordes suaves */
+  }
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(1100px 700px at 85% -10%, rgba(43,125,233,.10), transparent 60%),
+      radial-gradient(1000px 600px at -10% 110%, rgba(6,182,212,.10), transparent 60%),
+      var(--edu-bg);
+    color:var(--edu-ink);
+    font-family:"Poppins", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  }
+
+  .card-face{
+    border:1px solid var(--edu-border);
+    background:var(--edu-surface);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow: 0 10px 24px rgba(2,6,23,.06);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .card-face:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(2,6,23,.08); }
+
+  .station-stage{
+    position:relative; height:260px;
+    border-radius:12px; background:#eef6ff; /* más claro y educativo */
+    border:1px dashed #bfd7ff; overflow:hidden;
+  }
+  .stage-pulse{animation:stagePulse 1.6s ease-in-out 1;}
+  @keyframes stagePulse { 0%{box-shadow:0 0 0 0 rgba(43,125,233,.18)} 100%{box-shadow:0 0 0 18px rgba(43,125,233,0)} }
+  .shake{animation:shake .45s ease-in-out;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+  }
+
+  .runner{transition:cx .28s linear, cy .28s linear;}
+  .cone{transition:transform .4s ease, opacity .3s ease;}
+  .cone.knocked{transform:rotate(22deg) translateY(2px); opacity:.8;}
+
+  .modal{ position:fixed; inset:0; z-index:50; display:none; }
+  .modal.open{display:block;}
+  .modal-backdrop{ position:absolute; inset:0; background:rgba(11,19,36,.45); backdrop-filter:blur(3px); opacity:0; transition:opacity .2s ease; }
+  .modal.open .modal-backdrop{opacity:1;}
+  .modal-panel{
+    position:absolute; left:50%; top:52%;
+    transform:translate(-50%,-46%) scale(.98);
+    width:min(100vw - 2rem, 980px);
+    background:var(--edu-surface); border:1px solid var(--edu-border); border-radius:18px;
+    box-shadow:0 20px 60px rgba(2,6,23,.20); opacity:0; transition:all .2s ease;
+  }
+  .modal.open .modal-panel{opacity:1; transform:translate(-50%,-50%) scale(1);}
+  @media (max-width:640px){ .station-stage{height:220px;} }
+  @media print{ .modal{display:none !important;} }
+</style>
+</head>
+<body class="min-h-screen">
+  <!-- Portada institucional con logo -->
+  <section class="max-w-6xl mx-auto px-4 pt-6">
+    <div class="rounded-2xl border border-[var(--edu-border)] bg-white shadow-xl p-5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <img
+            src="https://www.carreras.pe/userfiles/images/Logos%20y%20fachadas/Logo%20UTP%202.png"
+            alt="Logo Universidad Tecnológica del Perú"
+            class="h-16 w-auto object-contain"
+            onerror="this.src=''; this.alt='Imagen no disponible'; this.style.display='none';"
+          />
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Universidad Tecnológica del Perú</h2>
+            <p class="text-gray-600">Facultad de Educación</p>
+            <p class="text-sm text-gray-500">Práctica Educativa I: Psicomotricidad para Educación Primaria</p>
+            <p class="text-xs text-gray-400">Sección 31960</p>
+          </div>
+        </div>
+        <div class="text-left md:text-right">
+          <p class="text-lg font-semibold text-gray-800">Aaron Sixto Callupe Llallico</p>
+          <p class="text-gray-600">Estudiante de Educación Primaria</p>
+          <p class="text-gray-600">Semana 6 - Actividad 1</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Título centrado -->
+  <header class="max-w-6xl mx-auto px-4 pt-6">
+    <div class="flex items-center justify-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 grid place-items-center text-white font-bold">CN</div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-center">Circuito Lúdico Neuromotriz</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pb-10">
+    <div id="cards" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </main>
+
+  <!-- Modal de simulación grande -->
+  <div id="sim-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-panel p-4 md:p-6">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="modal-icon" class="text-2xl">🏃‍♂️</div>
+          <div>
+            <div id="modal-title" class="font-semibold text-lg">Estación</div>
+            <div class="text-xs text-slate-600">Simulación por casos</div>
+          </div>
+        </div>
+        <button id="modal-close" class="rounded-lg px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800">Cerrar ✕</button>
+      </div>
+
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <button id="btn-success" class="px-3 py-1.5 rounded-md bg-[color:var(--edu-success)] hover:brightness-110 text-white">Éxito</button>
+        <button id="btn-fail" class="px-3 py-1.5 rounded-md bg-[color:var(--edu-danger)] hover:brightness-110 text-white">Dificultad</button>
+      </div>
+
+      <div id="modal-stage" class="station-stage mt-4 grid place-items-center">
+        <div class="text-sm text-slate-600">Elige un caso para iniciar la simulación</div>
+      </div>
+
+      <div id="modal-msg" class="mt-3 text-sm text-slate-700">
+        Selecciona “Éxito” para ver la ejecución fluida o “Dificultad” para ver la situación y la sugerencia.
+      </div>
+    </div>
+  </div>
+
+<script>
+const stations = [
+  { id:1, icon:"🏃‍♂️", name:"Carrera en zigzag", time:60,
+    activity:"Correr entre conos colocados en zigzag.",
+    issue:"Un estudiante tropieza con un cono.",
+    solution:"Puede continuar evitando el cono caído o volver a colocarlo rápidamente; reforzando el cuidado del espacio."
+  },
+  { id:2, icon:"⚖️", name:"Equilibrio", time:40,
+    activity:"Caminar sobre una cuerda o línea recta en el piso.",
+    issue:"Se distrae o pierde el equilibrio.",
+    solution:"Dar pasos más cortos y extender los brazos como las alas de un avión."
+  },
+  { id:3, icon:"🦘", name:"Salto de obstáculos", time:60,
+    activity:"Saltar dentro de aros en el suelo.",
+    issue:"No logra saltar todos.",
+    solution:"Ofrecer una variante de caminar rápido por encima, manteniendo la participación."
+  },
+  { id:4, icon:"🏅", name:"Carrera de relevos con objetos", time:50,
+    activity:"Cada niño corre hasta un punto, recoge un objeto y lo lleva hacia otro punto donde se encuentra su compañero.",
+    issue:"Un niño se olvida recoger el objeto o lo deja caer.",
+    solution:"Recordarle que puede recogerlo rápidamente y seguir, reforzando el trabajo en equipo."
+  },
+  { id:5, icon:"🎯", name:"Lanzamiento y atrape", time:60,
+    activity:"Lanzar pelotas a una caja y que caigan dentro.",
+    issue:"No acierta.",
+    solution:"Acercar la caja o usar pelotas más grandes para asegurar aciertos."
+  },
+  { id:6, icon:"👏", name:"Coordinación con palmas", time:45,
+    activity:"En parejas realizan una secuencia de palmas; derecha, izquierda, ambas manos al centro.",
+    issue:"Dificultad para seguir el ritmo o confusión en la secuencia.",
+    solution:"El líder marca el ritmo con palmas fuertes y lentas al inicio; luego aumenta la velocidad gradualmente."
+  }
+];
+
+const cardsRoot = document.getElementById('cards');
+const modal = document.getElementById('sim-modal');
+const modalBackdrop = modal.querySelector('.modal-backdrop');
+const modalClose = document.getElementById('modal-close');
+const modalIcon = document.getElementById('modal-icon');
+const modalTitle = document.getElementById('modal-title');
+const modalStage = document.getElementById('modal-stage');
+const modalMsg = document.getElementById('modal-msg');
+const btnSuccess = document.getElementById('btn-success');
+const btnFail = document.getElementById('btn-fail');
+
+function buildFront(s){
+  const el = document.createElement('div');
+  el.className = 'card-face p-5 cursor-pointer';
+  el.innerHTML = `
+    <div class="flex items-start gap-3">
+      <div class="text-3xl">${s.icon}</div>
+      <div class="flex-1">
+        <div class="font-semibold text-lg">${s.id}. ${s.name}</div>
+        <div class="text-sm text-slate-600 mt-0.5"><strong>Actividad:</strong> ${s.activity}</div>
+        <div class="text-sm text-slate-600 mt-0.5"><strong>Tiempo:</strong> ${s.time} segundos</div>
+        <div class="text-sm text-slate-600 mt-0.5"><strong>Posible problema:</strong> ${s.issue}</div>
+        <div class="text-sm text-slate-600 mt-0.5"><strong>Solución:</strong> ${s.solution}</div>
+      </div>
+    </div>
+  `;
+  el.addEventListener('click', ()=> openModalWithStation(s));
+  return el;
+}
+
+function render(){
+  cardsRoot.innerHTML = '';
+  stations.forEach(s=>{
+    const col = document.createElement('div');
+    col.appendChild(buildFront(s));
+    cardsRoot.appendChild(col);
+  });
+}
+
+function openModalWithStation(station){
+  modalIcon.textContent = station.icon;
+  modalTitle.textContent = `${station.id}. ${station.name}`;
+  modalStage.innerHTML = '<div class="text-sm text-slate-600">Elige un caso para iniciar la simulación</div>';
+  modalMsg.textContent = 'Selecciona “Éxito” para ver la ejecución fluida o “Dificultad” para ver la situación y la sugerencia.';
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+
+  btnSuccess.onclick = ()=> runSimulation(station, modalStage, modalMsg, true);
+  btnFail.onclick = ()=> runSimulation(station, modalStage, modalMsg, false);
+}
+function closeModal(){
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+}
+modalBackdrop.addEventListener('click', closeModal);
+modalClose.addEventListener('click', closeModal);
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+function runSimulation(station, stage, msgEl, success = true){
+  stage.classList.remove('shake');
+  stage.innerHTML = '';
+  stage.classList.add('stage-pulse');
+  setTimeout(()=>stage.classList.remove('stage-pulse'), 500);
+
+  // Estación 1: Zigzag con personita
+  if(station.id === 1){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox','0 0 900 260');
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="lane" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="rgba(43,125,233,.18)"/>
+          <stop offset="100%" stop-color="rgba(6,182,212,.20)"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="900" height="260" rx="12" fill="url(#lane)"/>
+    `;
+    stage.appendChild(svg);
+
+    const points = [
+      {x:60, y:130},
+      {x:180, y:60}, {x:300, y:200}, {x:420, y:60}, {x:540, y:200}, {x:660, y:60}, {x:780, y:130}
+    ];
+    const conesPos = [
+      {x:180, y:60}, {x:300, y:200}, {x:420, y:60}, {x:540, y:200}, {x:660, y:60}
+    ];
+
+    const path = document.createElementNS(svgNS,'polyline');
+    path.setAttribute('points', points.map(p=>`${p.x},${p.y}`).join(' '));
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke','rgba(30,41,59,.25)');
+    path.setAttribute('stroke-width','4');
+    svg.appendChild(path);
+
+    const cones = conesPos.map(c=>{
+      const g = document.createElementNS(svgNS,'g');
+      g.setAttribute('class','cone');
+      g.setAttribute('transform',`translate(${c.x-12},${c.y-18})`);
+      g.innerHTML = `
+        <polygon points="12,0 24,28 0,28" fill="#f59e0b"/>
+        <rect x="2" y="28" width="20" height="6" fill="#e2e8f0"/>
+      `;
+      svg.appendChild(g);
+      return g;
+    });
+
+    // Personita
+    const head = document.createElementNS(svgNS,'circle'); head.setAttribute('r','10'); head.setAttribute('cx', points[0].x); head.setAttribute('cy', points[0].y-12); head.setAttribute('fill', '#94a3b8');
+    const body = document.createElementNS(svgNS,'rect'); body.setAttribute('x', points[0].x-8); body.setAttribute('y', points[0].y-2); body.setAttribute('width','16'); body.setAttribute('height','26'); body.setAttribute('rx','4'); body.setAttribute('fill', success ? 'var(--edu-success)' : 'var(--edu-danger)');
+    svg.appendChild(body); svg.appendChild(head);
+
+    msgEl.innerHTML = success
+      ? "<span style='color:var(--edu-success);font-weight:600'>¡Felicitaciones!</span> Pasó la estación 1 sin problemas."
+      : `<span style='color:var(--edu-danger);font-weight:600'>Dificultad: tumbó un cono.</span> ${stations[0].solution}`;
+
+    let i = 0;
+    const speed = 240;
+    const knockIdx = success ? -1 : 2;
+    function step(){
+      if(i >= points.length-1){ return; }
+      const to = points[i+1];
+      head.setAttribute('cx', to.x);
+      head.setAttribute('cy', to.y-12);
+      body.setAttribute('x', to.x-8);
+      body.setAttribute('y', to.y-2);
+
+      if(!success && i === knockIdx){
+        cones[knockIdx].classList.add('knocked');
+        stage.classList.add('shake'); setTimeout(()=>stage.classList.remove('shake'), 500);
+      }
+      i++;
+      setTimeout(step, speed);
+    }
+    setTimeout(step, speed);
+    return;
+  }
+
+  // Estación 2: Equilibrio — personita caminando sobre línea
+  if(station.id === 2){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('viewBox','0 0 900 260');
+    svg.innerHTML = `<rect x="0" y="0" width="900" height="260" rx="12" fill="rgba(43,125,233,.10)"/>`;
+    stage.appendChild(svg);
+
+    const line = document.createElementNS(svgNS,'rect');
+    line.setAttribute('x','100'); line.setAttribute('y','130'); line.setAttribute('width','700'); line.setAttribute('height','4');
+    line.setAttribute('fill','#1e293b');
+    svg.appendChild(line);
+
+    // Personita sobre la línea
+    const head = document.createElementNS(svgNS,'circle'); head.setAttribute('r','10'); head.setAttribute('cx','100'); head.setAttribute('cy','120'); head.setAttribute('fill','#94a3b8');
+    const body = document.createElementNS(svgNS,'rect'); body.setAttribute('x','92'); body.setAttribute('y','130'); body.setAttribute('width','16'); body.setAttribute('height','28'); body.setAttribute('rx','4'); body.setAttribute('fill', success ? 'var(--edu-success)' : 'var(--edu-danger)');
+    svg.appendChild(body); svg.appendChild(head);
+
+    let x=100;
+    const timer = setInterval(()=>{
+      x += 20;
+      if(x>=800){ clearInterval(timer); }
+      const sway = success ? 0 : (Math.random()*14-7);
+      head.setAttribute('cx', x); head.setAttribute('cy', 120 + sway/2);
+      body.setAttribute('x', x-8); body.setAttribute('y', 130 + sway);
+      if(!success && Math.abs(sway)>8){
+        stage.classList.add('shake'); setTimeout(()=>stage.classList.remove('shake'), 380);
+      }
+    }, 220);
+
+    msgEl.innerHTML = success
+      ? "<span style='color:var(--edu-success);font-weight:600'>¡Felicitaciones!</span> Mantuvo el equilibrio."
+      : `<span style='color:var(--edu-danger);font-weight:600'>Perdió el equilibrio.</span> ${station.solution}`;
+    return;
+  }
+
+  // Estación 3: Saltos — personita saltando aros
+  if(station.id === 3){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('viewBox','0 0 900 260');
+    svg.innerHTML = `<rect x="0" y="0" width="900" height="260" rx="12" fill="rgba(43,125,233,.10)"/>`;
+    stage.appendChild(svg);
+
+    const rings = [180,300,420,540,660,780];
+    rings.forEach((x,i)=>{
+      const r = document.createElementNS(svgNS,'circle');
+      r.setAttribute('cx', x); r.setAttribute('cy', i%2?170:90); r.setAttribute('r','34');
+      r.setAttribute('fill','none'); r.setAttribute('stroke','#1e293b'); r.setAttribute('stroke-width','4');
+      svg.appendChild(r);
+    });
+
+    // Personita
+    const head = document.createElementNS(svgNS,'circle'); head.setAttribute('r','10'); head.setAttribute('cx','90'); head.setAttribute('cy','198'); head.setAttribute('fill','#94a3b8');
+    const body = document.createElementNS(svgNS,'rect'); body.setAttribute('x','82'); body.setAttribute('y','208'); body.setAttribute('width','16'); body.setAttribute('height','28'); body.setAttribute('rx','4'); body.setAttribute('fill', success ? 'var(--edu-success)' : 'var(--edu-danger)');
+    svg.appendChild(body); svg.appendChild(head);
+
+    const targets = rings.map((x,i)=>({x, y: i%2?170:90}));
+    let idx=0;
+    const timer = setInterval(()=>{
+      if(idx>=targets.length){ clearInterval(timer); return; }
+      const t = targets[idx];
+      head.setAttribute('cx', t.x); head.setAttribute('cy', t.y-12);
+      body.setAttribute('x', t.x-8); body.setAttribute('y', t.y-2);
+      if(!success && idx===3){
+        body.setAttribute('y', t.y+38); head.setAttribute('cy', t.y+28);
+        stage.classList.add('shake'); setTimeout(()=>stage.classList.remove('shake'), 420);
+      }
+      idx++;
+    }, 260);
+
+    msgEl.innerHTML = success
+      ? "<span style='color:var(--edu-success);font-weight:600'>¡Felicitaciones!</span> Completó los saltos."
+      : `<span style='color:var(--edu-danger);font-weight:600'>Le costó un salto.</span> ${station.solution}`;
+    return;
+  }
+
+  // Estación 4: Relevos
+  if(station.id === 4){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('viewBox','0 0 900 260');
+    svg.innerHTML = `<rect x="0" y="0" width="900" height="260" rx="12" fill="rgba(43,125,233,.10)"/>`;
+    stage.appendChild(svg);
+
+    const start = document.createElementNS(svgNS,'rect');
+    start.setAttribute('x','70'); start.setAttribute('y','200'); start.setAttribute('width','110'); start.setAttribute('height','28'); start.setAttribute('fill','none'); start.setAttribute('stroke','#1e293b'); start.setAttribute('stroke-dasharray','6 4'); start.setAttribute('rx','6');
+    svg.appendChild(start);
+    const pickup = document.createElementNS(svgNS,'circle');
+    pickup.setAttribute('cx','450'); pickup.setAttribute('cy','130'); pickup.setAttribute('r','12'); pickup.setAttribute('fill','#f59e0b');
+    svg.appendChild(pickup);
+    const finish = document.createElementNS(svgNS,'rect');
+    finish.setAttribute('x','720'); finish.setAttribute('y','200'); finish.setAttribute('width','110'); finish.setAttribute('height','28'); finish.setAttribute('fill','none'); finish.setAttribute('stroke','#1e293b'); finish.setAttribute('stroke-dasharray','6 4'); finish.setAttribute('rx','6');
+    svg.appendChild(finish);
+
+    const body = document.createElementNS(svgNS,'rect');
+    body.setAttribute('x','90'); body.setAttribute('y','180'); body.setAttribute('width','16'); body.setAttribute('height','26'); body.setAttribute('fill', '#0ea5e9'); body.setAttribute('rx','4');
+    const head = document.createElementNS(svgNS,'circle'); head.setAttribute('cx','98'); head.setAttribute('cy','170'); head.setAttribute('r','8'); head.setAttribute('fill','#94a3b8');
+    svg.appendChild(body); svg.appendChild(head);
+
+    const carried = document.createElementNS(svgNS,'circle'); carried.setAttribute('cx','-50'); carried.setAttribute('cy','-50'); carried.setAttribute('r','6'); carried.setAttribute('fill','#f59e0b'); svg.appendChild(carried);
+
+    let x=98, y=170; let phase=0;
+    function moveTo(tx, ty, duration, onArrive){
+      const frames = Math.max(24, Math.floor(duration/16));
+      const dx = (tx - x)/frames; const dy = (ty - y)/frames; let k=0;
+      function step(){
+        x += dx; y += dy; k++;
+        head.setAttribute('cx', x); head.setAttribute('cy', y-0);
+        body.setAttribute('x', x-8); body.setAttribute('y', y+10);
+        if(phase>=1){ carried.setAttribute('cx', x+10); carried.setAttribute('cy', y+6); }
+        if(k<frames) requestAnimationFrame(step); else onArrive && onArrive();
+      }
+      requestAnimationFrame(step);
+    }
+
+    function startRelay(){
+      moveTo(450,130, 1000, ()=>{
+        setTimeout(()=>{
+          carried.setAttribute('cx', x+10); carried.setAttribute('cy', y+6); phase = 1;
+          if(!success){
+            moveTo(300,170, 900, ()=>{
+              const groundY = 210;
+              carried.setAttribute('cx', x+10); carried.setAttribute('cy', groundY);
+              stage.classList.add('shake'); setTimeout(()=>stage.classList.remove('shake'), 600);
+              msgEl.innerHTML = `<span style='color:var(--edu-danger);font-weight:600'>Dejó caer u olvidó el objeto.</span> ${station.solution}`;
+              setTimeout(()=>{
+                head.setAttribute('cy', y+3);
+                carried.setAttribute('cx', x+10); carried.setAttribute('cy', y+6);
+                setTimeout(()=> head.setAttribute('cy', y), 300);
+                moveTo(740,200, 1200, ()=>{
+                  msgEl.innerHTML += " <span style='color:#0f766e'>¡Listo!</span> Retomó la carrera y entregó al compañero.";
+                });
+              }, 700);
+            });
+          } else {
+            moveTo(740,200, 1500, ()=>{
+              msgEl.innerHTML = "<span style='color:var(--edu-success);font-weight:600'>¡Felicitaciones!</span> Entregó el objeto al compañero y continuaron.";
+            });
+          }
+        }, 300);
+      });
+    }
+    startRelay();
+    return;
+  }
+
+  // Estación 5: Lanzamiento — con lanzador y 3 intentos
+  if(station.id === 5){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('viewBox','0 0 900 260');
+    svg.innerHTML = `<rect x="0" y="0" width="900" height="260" rx="12" fill="rgba(43,125,233,.10)"/>`;
+    stage.appendChild(svg);
+
+    const box = document.createElementNS(svgNS,'rect');
+    box.setAttribute('x','720'); box.setAttribute('y','90'); box.setAttribute('width','80'); box.setAttribute('height','80');
+    box.setAttribute('fill','#1e293b'); box.setAttribute('rx','8');
+    svg.appendChild(box);
+
+    // Personita lanzadora
+    const tHead = document.createElementNS(svgNS,'circle'); tHead.setAttribute('r','10'); tHead.setAttribute('cx','140'); tHead.setAttribute('cy','160'); tHead.setAttribute('fill','#94a3b8');
+    const tBody = document.createElementNS(svgNS,'rect'); tBody.setAttribute('x','132'); tBody.setAttribute('y','170'); tBody.setAttribute('width','16'); tBody.setAttribute('height','28'); tBody.setAttribute('rx','4'); tBody.setAttribute('fill','#0ea5e9');
+    svg.appendChild(tBody); svg.appendChild(tHead);
+
+    const insideY = 130;
+    function throwBall({hit=true, delay=0, index=0}){
+      const ball = document.createElementNS(svgNS,'circle');
+      ball.setAttribute('r','10'); ball.setAttribute('cx','160'); ball.setAttribute('cy','180');
+      ball.setAttribute('fill', hit ? 'var(--edu-success)' : 'var(--edu-danger)');
+      svg.appendChild(ball);
+      setTimeout(()=>{
+        let t=0; const timer=setInterval(()=>{
+          t+=0.05; if(t>1){ clearInterval(timer); }
+          const x = 160 + t*(720-160);
+          const y = 180 - (hit?1:0.9) * 120 * Math.sin(Math.PI*t);
+          ball.setAttribute('cx', x); ball.setAttribute('cy', y);
+          if(t>=1){
+            if(hit){
+              ball.setAttribute('cx', 760 - (index*10));
+              ball.setAttribute('cy', insideY + (index*8));
+            } else {
+              ball.setAttribute('cx', 820 + index*12);
+              ball.setAttribute('cy', 170 + index*6);
+            }
+          }
+        }, 30);
+      }, delay);
+    }
+
+    if(success){
+      throwBall({hit:true, delay:0, index:0});
+      throwBall({hit:true, delay:500, index:1});
+      throwBall({hit:true, delay:1000, index:2});
+      setTimeout(()=>{ msgEl.innerHTML = "<span style='color:var(--edu-success);font-weight:600'>¡Excelente!</span> Ingresaron 3 objetos dentro de la caja."; }, 1800);
+    } else {
+      throwBall({hit:true, delay:0, index:0});
+      throwBall({hit:false, delay:500, index:1});
+      throwBall({hit:true, delay:1000, index:2});
+      setTimeout(()=>{
+        msgEl.innerHTML = `<span style='color:var(--edu-danger);font-weight:600'>Uno quedó fuera.</span> ${station.solution}`;
+        stage.classList.add('shake'); setTimeout(()=>stage.classList.remove('shake'), 500);
+      }, 1800);
+    }
+    return;
+  }
+
+  // Estación 6: Coordinación con palmas
+  if(station.id === 6){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('viewBox','0 0 900 260');
+    svg.innerHTML = `<rect x="0" y="0" width="900" height="260" rx="12" fill="rgba(43,125,233,.10)"/>`;
+    stage.appendChild(svg);
+
+    function makeKid(x, color){
+      const g = document.createElementNS(svgNS,'g');
+      const body = document.createElementNS(svgNS,'rect'); body.setAttribute('x', x-8); body.setAttribute('y', 150); body.setAttribute('width', 16); body.setAttribute('height', 28); body.setAttribute('rx', 4); body.setAttribute('fill', color);
+      const head = document.createElementNS(svgNS,'circle'); head.setAttribute('cx', x); head.setAttribute('cy', 140); head.setAttribute('r', 10); head.setAttribute('fill', '#94a3b8');
+      const hand = document.createElementNS(svgNS,'circle'); hand.setAttribute('cx', x); hand.setAttribute('cy', 160); hand.setAttribute('r', 6); hand.setAttribute('fill', '#22c55e');
+      g.appendChild(body); g.appendChild(head); g.appendChild(hand); g.hand = hand; return g;
+    }
+    const kidA = makeKid(320,'#0ea5e9'); const kidB = makeKid(580,'#10b981');
+    svg.appendChild(kidA); svg.appendChild(kidB);
+
+    const seq = [
+      {a:{x:360,y:150}, b:{x:540,y:150}},
+      {a:{x:300,y:150}, b:{x:600,y:150}},
+      {a:{x:450,y:150}, b:{x:450,y:150}},
+    ];
+
+    let stepIdx=0, cycles=0;
+    function moveHand(hand, tx, ty, steps=8){
+      const cx = parseFloat(hand.getAttribute('cx')); const cy = parseFloat(hand.getAttribute('cy'));
+      const dx=(tx-cx)/steps, dy=(ty-cy)/steps; let k=0;
+      const tick=()=>{ hand.setAttribute('cx', cx+dx*(k+1)); hand.setAttribute('cy', cy+dy*(k+1)); k++; if(k<steps){ requestAnimationFrame(tick);} };
+      requestAnimationFrame(tick);
+    }
+
+    function doStep(){
+      const s = seq[stepIdx];
+      const failing = (!success && cycles % 2 === 0); // alterna fallo/éxito
+      if(failing){
+        moveHand(kidA.hand, s.a.x + 14, s.a.y + 8, 10);
+        moveHand(kidB.hand, s.b.x - 14, s.b.y - 6, 10);
+        stage.classList.add('shake'); setTimeout(()=>stage.classList.remove('shake'), 380);
+        msgEl.innerHTML = `<span style='color:var(--edu-danger);font-weight:600'>Se confundieron en la secuencia.</span> ${station.solution}`;
+      } else {
+        moveHand(kidA.hand, s.a.x, s.a.y, 8);
+        moveHand(kidB.hand, s.b.x, s.b.y, 8);
+        if(success){ msgEl.innerHTML = "<span style='color:var(--edu-success);font-weight:600'>¡Buen ritmo!</span> Siguieron la secuencia."; }
+      }
+      stepIdx = (stepIdx+1)%seq.length;
+      if(stepIdx===0) cycles++;
+      if(cycles<3){ setTimeout(doStep, success ? 620 : 820); }
+    }
+    doStep();
+    return;
+  }
+
+  msgEl.textContent = success ? '¡Bien hecho!' : station.solution;
+}
+
+render();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f5c9dcb16056a0',t:'MTc1NzkxNDgxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
