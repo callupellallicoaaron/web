@@ -2,278 +2,183 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mercado Matemático - Vista Maximizada</title>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteo Oficial de Trabajo</title>
     <style>
-        :root {
-            --primary: #4D96FF; --secondary: #FF6B9D; --success: #6BCB77; --danger: #FF6B6B; --accent: #FFC93C;
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body, html { 
-            margin: 0; padding: 0; height: 100vh; width: 100vw; 
-            font-family: 'Comic Sans MS', sans-serif; background: #f0f4f8; overflow: hidden;
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 100%;
+            box-sizing: border-box;
         }
-
-        .main-wrapper { display: flex; flex-direction: column; height: 100%; width: 100%; }
-
-        .header { height: 40px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .header h1 { margin: 0; font-size: 1.1rem; }
-
-        .config-bar { 
-            height: 40px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; flex-shrink: 0;
+        h2 { text-align: center; color: #1a252f; margin-top: 0; }
+        .zone {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-        .config-bar input { width: 60px; padding: 4px; border-radius: 6px; border: 2px solid var(--primary); text-align: center; font-size: 1rem; }
-
-        .game-container {
-            flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; overflow: hidden;
+        label { font-weight: bold; display: block; margin-bottom: 8px; color: #4a5568; }
+        input, button {
+            width: 100%; padding: 12px; border-radius: 6px;
+            border: 1px solid #cbd5e1; font-size: 16px; box-sizing: border-box;
         }
-
-        /* Panel Mercado */
-        .market-panel { 
-            background: white; border-radius: 20px; padding: 10px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow: hidden; 
+        button {
+            background: #3182ce; color: white; border: none;
+            font-weight: bold; cursor: pointer; margin-top: 10px;
         }
-        .product-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; height: 100%; overflow-y: auto;
+        button:hover { background: #2b6cb0; }
+        .admin-btn { background: #1a202c; }
+        .admin-btn:hover { background: #2d3748; }
+        .code-list { font-family: monospace; background: #edf2f7; padding: 10px; border-radius: 4px; font-size: 14px; line-height: 1.6; }
+        .result {
+            font-size: 18px; text-align: center; font-weight: bold;
+            color: #2f855a; padding: 15px; background: #f0fff4;
+            border: 2px dashed #38a169; border-radius: 6px; margin-top: 15px;
+            display: none;
         }
-        .product-item { 
-            background: #fff; border: 2px solid #edf2f7; border-radius: 15px; padding: 8px; 
-            text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        .pass-container {
+            margin-top: 30px;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 15px;
+            text-align: center;
         }
-        .product-item.active { border-color: var(--secondary); background: #fff5f8; transform: scale(0.96); }
-        .emoji { font-size: 2rem; }
-        .product-name { font-size: 0.75rem; font-weight: bold; color: #333; }
-        .price { font-weight: bold; color: var(--secondary); font-size: 0.9rem; }
-
-        /* Panel Trabajo */
-        .work-panel { display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
-        
-        .visual-box { 
-            background: #f1f5f9; border-radius: 25px; padding: 10px; flex: 1.5; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            overflow: hidden; position: relative;
+        .pass-container input {
+            padding: 8px; font-size: 14px; width: 60%; display: inline-block; margin-right: 5px;
         }
-        
-        /* Indicador Superior con Pista Integrada */
-        .top-info-bar {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
-            background: white; padding: 8px 20px; border-radius: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        .pass-container button {
+            padding: 8px 12px; font-size: 14px; width: auto; display: inline-block; margin: 0; background: #718096;
         }
-        .stat-text { font-weight: bold; font-size: 1.1rem; }
-
-        .multibase-container { 
-            display: flex; gap: 10px; justify-content: center; align-items: flex-end; flex-wrap: wrap; 
-            width: 100%; flex: 1; align-content: center;
-        }
-
-        .decena-col { 
-            display: flex; flex-direction: column-reverse; gap: 2px; 
-            background: rgba(255,255,255,0.6); padding: 3px; border-radius: 6px; border: 1px solid #cbd5e1;
-        }
-        .unidades-grid { 
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 3px; align-self: flex-end;
-        }
-        
-        .block { 
-            width: var(--block-size, 25px); 
-            height: var(--block-size, 25px); 
-            background: var(--primary); border-radius: 4px; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15); 
-        }
-        .block.spent { background: var(--danger); opacity: 0.15; transform: scale(0.85); box-shadow: none; }
-        
-        /* Respuesta */
-        .answer-area { 
-            background: white; border-radius: 20px; padding: 12px; border: 2px solid #e2e8f0; flex: 0.5; display: flex; flex-direction: column; justify-content: space-around;
-        }
-        .enunciado { background: #fdf9da; padding: 8px; border-radius: 10px; border-left: 6px solid var(--accent); display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
-        input#input-result { width: 85px; padding: 5px; font-size: 1.6rem; border: 3px solid #cbd5e1; border-radius: 12px; text-align: center; outline: none; }
-        
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .btn { padding: 10px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
-        .btn-check { background: var(--success); color: white; }
-        .btn-reset { background: #94a3b8; color: white; }
-        
-        .hint-btn { background: var(--accent); border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: none; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        #hint-value { font-weight: bold; color: var(--danger); display: none; font-size: 1.3rem; }
-        .tts-btn { background: var(--primary); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-        @media (max-width: 800px) { .game-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="main-wrapper">
-    <div class="header"><h1>🏪 Mercado Matemático Interactivo</h1></div>
-    <div class="config-bar">Dinero inicial: S/ <input type="number" id="budgetInput" value="32" min="1" max="100" onchange="updateBudget()"></div>
-    
-    <div class="game-container">
-        <div class="market-panel">
-            <div class="product-grid" id="productGrid"></div>
-        </div>
+<div class="card">
+    <h2>🎰 Sorteo de Partes del Trabajo</h2>
+    <p style="font-size:14px; color:#718096; text-align:center;">Asignación fija, transparente y sin trucos.</p>
 
-        <div class="work-panel">
-            <div class="visual-box">
-                <div class="top-info-bar">
-                    <span class="stat-text">Total: <span id="stat-total">32</span> | Gastas: <span id="stat-spent" style="color:var(--danger)">0</span></span>
-                    <button class="hint-btn" id="hintBtn" onclick="showHint()"><i data-lucide="lightbulb" size="18"></i></button>
-                    <span id="hint-value">?</span>
-                </div>
-                
-                <div class="multibase-container" id="multibaseContainer"></div>
-            </div>
+    <!-- ZONA DEL ESTUDIANTE -->
+    <div class="zone">
+        <label>¿Vas a reclamar tus partes? ingresa tu código:</label>
+        <input type="text" id="studentCode" placeholder="Pega aquí tu código de WhatsApp" style="text-transform: uppercase;">
+        <button onclick="verificarCodigo()">🔑 Revelar Mis Partes</button>
+        <div id="resultadoEstudiante" class="result"></div>
+    </div>
 
-            <div class="answer-area">
-                <div class="enunciado">
-                    <button class="tts-btn" id="speakBtn" onclick="speakEnunciado()" style="display:none;"><i data-lucide="volume-2" size="18"></i></button>
-                    <span id="enunciadoText">¡Hola! Selecciona un producto para comprar.</span>
-                </div>
-                <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
-                    <b>¿Cuánto queda?</b> 
-                    <input type="number" id="input-result" placeholder="?">
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-check" onclick="validate()">Verificar</button>
-                    <button class="btn btn-reset" onclick="resetGame()">Reiniciar</button>
-                </div>
-                <div id="feedback" style="text-align:center; font-weight:bold; font-size: 0.85rem; height: 1rem;"></div>
-            </div>
+    <!-- ZONA DEL ADMINISTRADOR (TÚ, AARON) -->
+    <div class="zone" id="adminZone" style="display: none;">
+        <label>🔧 Zona de Control (Solo Aaron):</label>
+        <p style="font-size:12px; margin:0 0 10px 0; color:#718096;">Haz clic abajo para sortear los temas manteniendo los mismos códigos fijos:</p>
+        <button class="admin-btn" onclick="ejecutarSorteoFijo()">🎰 Sortear</button>
+        <div id="listaCodigos" style="margin-top:15px; display:none;">
+            <label>Resultado del Sorteo Oficial:</label>
+            <div class="code-list" id="codigosGenerados"></div>
         </div>
+    </div>
+
+    <!-- ACCESO POR CONTRASEÑA -->
+    <div class="pass-container" id="passAccessBox">
+        <input type="password" id="adminPass" placeholder="Contraseña de administrador">
+        <button onclick="verificarPassword()">Entrar</button>
     </div>
 </div>
 
 <script>
-    let budget = 32, selectedPrice = 0, selectedName = "", selectedArt = "";
-    
-    const products = [
-        { n: 'Peluche', p: 12, e: '🧸', a: 'un' }, { n: 'Pelota', p: 8, e: '⚽', a: 'una' },
-        { n: 'Libro', p: 15, e: '📚', a: 'un' }, { n: 'Set Arte', p: 5, e: '🎨', a: 'un' },
-        { n: 'Helado', p: 3, e: '🍦', a: 'un' }, { n: 'Carro', p: 20, e: '🚗', a: 'un' },
-        { n: 'Robot', p: 25, e: '🤖', a: 'un' }, { n: 'Manzana', p: 2, e: '🍎', a: 'una' },
-        { n: 'Gorra', p: 10, e: '🧢', a: 'una' }, { n: 'Bici', p: 45, e: '🚲', a: 'una' },
-        { n: 'Dino', p: 18, e: '🦖', a: 'un' }, { n: 'Tren', p: 30, e: '🚂', a: 'un' }
+    // Estructuras principales fijas
+    const nombresGrupo = ["Kiara", "Angie", "Ariana", "Estefany", "Aaron"];
+    const partes = [
+        "Partes 1 y 2",
+        "Partes 3 y 4",
+        "Partes 5 y 6",
+        "Partes 7 y 8",
+        "Partes 9 y 10"
     ];
 
-    function init() {
-        const grid = document.getElementById('productGrid');
-        grid.innerHTML = '';
-        products.forEach(prod => {
-            const div = document.createElement('div');
-            div.className = 'product-item';
-            div.onclick = () => selectProduct(prod, div);
-            div.innerHTML = `<span class="emoji">${prod.e}</span><span class="product-name">${prod.n}</span><span class="price">S/ ${prod.p}</span>`;
-            grid.appendChild(div);
-        });
-        updateBudget(); 
-        lucide.createIcons();
-    }
-
-    function renderMultibase(total, spent = 0) {
-        const container = document.getElementById('multibaseContainer');
-        container.innerHTML = '';
-        const remaining = total - spent;
-
-        // Escalado optimizado para usar el nuevo espacio vertical
-        let blockSize = 32; 
-        if (total > 30) blockSize = 28;
-        if (total > 50) blockSize = 23;
-        if (total > 80) blockSize = 20;
-        
-        container.style.setProperty('--block-size', `${blockSize}px`);
-
-        const decenas = Math.floor(total / 10);
-        const unidades = total % 10;
-
-        for (let d = 0; d < decenas; d++) {
-            const col = document.createElement('div');
-            col.className = 'decena-col';
-            for (let i = 0; i < 10; i++) {
-                const blockIdx = (d * 10) + i;
-                const b = document.createElement('div');
-                b.className = 'block' + (blockIdx >= remaining ? ' spent' : '');
-                col.appendChild(b);
-            }
-            container.appendChild(col);
-        }
-
-        if (unidades > 0) {
-            const uGrid = document.createElement('div');
-            uGrid.className = 'unidades-grid';
-            for (let u = 0; u < unidades; u++) {
-                const blockIdx = (decenas * 10) + u;
-                const b = document.createElement('div');
-                b.className = 'block' + (blockIdx >= remaining ? ' spent' : '');
-                uGrid.appendChild(b);
-            }
-            container.appendChild(uGrid);
-        }
-    }
-
-    function selectProduct(prod, element) {
-        if(prod.p > budget) { speak("No te alcanza el dinero"); return; }
-        document.querySelectorAll('.product-item').forEach(i => i.classList.remove('active'));
-        element.classList.add('active');
-        selectedPrice = prod.p; selectedName = prod.n; selectedArt = prod.a;
-        document.getElementById('enunciadoText').innerText = `Tienes ${budget} soles y compras ${selectedArt} ${selectedName} de ${selectedPrice} soles. ¿Cuánto te queda?`;
-        document.getElementById('speakBtn').style.display = "flex";
-        renderMultibase(budget, prod.p);
-        document.getElementById('stat-spent').innerText = prod.p;
-        document.getElementById('feedback').innerText = '';
-        document.getElementById('hintBtn').style.display = "none";
-        document.getElementById('input-result').value = '';
-    }
-
-    function speak(text) {
-        window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'es-PE'; msg.rate = 0.95;
-        window.speechSynthesis.speak(msg);
-    }
-
-    function validate() {
-        if(selectedPrice === 0) return;
-        const userVal = parseInt(document.getElementById('input-result').value);
-        const correct = budget - selectedPrice;
-        const fb = document.getElementById('feedback');
-        if(userVal === correct) {
-            fb.style.color = "var(--success)"; fb.innerText = "¡Excelente trabajo!";
-            speak("¡Excelente trabajo!");
-            document.getElementById('hintBtn').style.display = "none";
-        } else {
-            fb.style.color = "var(--danger)"; fb.innerText = "¡Casi! Inténtalo de nuevo.";
-            speak("¡Casi! Inténtalo de nuevo.");
-            document.getElementById('hintBtn').style.display = "flex";
-        }
-    }
-
-    function showHint() {
-        const hintVal = document.getElementById('hint-value');
-        hintVal.innerText = budget - selectedPrice;
-        hintVal.style.display = "inline";
-        setTimeout(() => { hintVal.style.display = "none"; }, 500);
-    }
-
-    function speakEnunciado() { speak(document.getElementById('enunciadoText').innerText); }
+    // Códigos fijos precalculados matemáticamente: Kiara=513, Angie=613, Ariana=713, Estefany=813, Aaron=913
+    const codigosFijos = [513, 613, 713, 813, 913];
     
-    function updateBudget() { 
-        let val = parseInt(document.getElementById('budgetInput').value);
-        if (isNaN(val) || val < 1) val = 1;
-        if (val > 100) val = 100;
-        budget = val;
-        document.getElementById('stat-total').innerText = budget; 
-        resetGame(); 
+    // Aquí guardaremos el resultado del sorteo en la sesión actual
+    let ordenAsignadoGlobal = [];
+
+    // Validar contraseña
+    function verificarPassword() {
+        const pass = document.getElementById("adminPass").value;
+        if (pass === "callupe16") {
+            document.getElementById("adminZone").style.display = "block";
+            document.getElementById("passAccessBox").style.display = "none";
+        } else {
+            alert("Contraseña incorrecta de Administrador.");
+        }
     }
 
-    function resetGame() { 
-        selectedPrice = 0; document.getElementById('input-result').value = ''; 
-        document.getElementById('enunciadoText').innerText = "¡Hola! Selecciona un producto para comprar.";
-        document.getElementById('feedback').innerText = ''; document.getElementById('stat-spent').innerText = "0";
-        document.getElementById('hintBtn').style.display = "none"; document.getElementById('speakBtn').style.display = "none";
-        document.querySelectorAll('.product-item').forEach(i => i.classList.remove('active')); 
-        renderMultibase(budget, 0);
+    // Ejecuta el sorteo mezclando partes sin alterar los códigos de los alumnos
+    function ejecutarSorteoFijo() {
+        ordenAsignadoGlobal = [...partes];
+        // Algoritmo Fisher-Yates para mezclar de forma aleatoria transparente
+        for (let i = ordenAsignadoGlobal.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [ordenAsignadoGlobal[i], ordenAsignadoGlobal[j]] = [ordenAsignadoGlobal[j], ordenAsignadoGlobal[i]];
+        }
+
+        let htmlText = "";
+        for(let i = 0; i < nombresGrupo.length; i++) {
+            htmlText += `<b>${nombresGrupo[i]}</b> (SRT-${codigosFijos[i]}) -> 🟢 ${ordenAsignadoGlobal[i]}<br>`;
+        }
+
+        document.getElementById("codigosGenerados").innerHTML = htmlText;
+        document.getElementById("listaCodigos").style.display = "block";
     }
 
-    init();
+    function verificarCodigo() {
+        let codigoRaw = document.getElementById("studentCode").value.trim().toUpperCase();
+        let resultDiv = document.getElementById("resultadoEstudiante");
+
+        if (ordenAsignadoGlobal.length === 0) {
+            alert("Aaron aún no ha presionado el botón 'Sortear' en la zona de control.");
+            return;
+        }
+
+        if(!codigoRaw.startsWith("SRT-")) {
+            alert("Formato incorrecto. Recuerda incluir el 'SRT-', por ejemplo: SRT-513");
+            return;
+        }
+
+        let numero = parseInt(codigoRaw.replace("SRT-", ""));
+        
+        // Buscamos a quién le pertenece ese número fijo
+        let alumnoIndex = codigosFijos.indexOf(numero);
+
+        if(alumnoIndex === -1) {
+            resultDiv.style.display = "block";
+            resultDiv.style.background = "#fff5f5";
+            resultDiv.style.borderColor = "#e53e3e";
+            resultDiv.style.color = "#c53030";
+            resultDiv.textContent = "❌ Código inválido. Verifica que esté bien escrito.";
+            return;
+        }
+
+        // Extraemos la parte correspondiente según el sorteo actual
+        let parteLeida = ordenAsignadoGlobal[alumnoIndex];
+
+        // Mostrar resultado limpio y personalizado
+        resultDiv.style.display = "block";
+        resultDiv.style.background = "#f0fff4";
+        resultDiv.style.borderColor = "#38a169";
+        resultDiv.style.color = "#2f855a";
+        resultDiv.innerHTML = `👤 Hola, <b>${nombresGrupo[alumnoIndex]}</b><br>🎉 Te corresponde trabajar:<br>✨ <b>${parteLeida}</b> ✨`;
+    }
 </script>
+
 </body>
 </html>
