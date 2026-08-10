@@ -1,183 +1,357 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorteo Oficial de Trabajo</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f0f2f5;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            max-width: 450px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        h2 { text-align: center; color: #1a252f; margin-top: 0; }
-        .zone {
-            background: #f8f9fa;
-            border: 1px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        label { font-weight: bold; display: block; margin-bottom: 8px; color: #4a5568; }
-        input, button {
-            width: 100%; padding: 12px; border-radius: 6px;
-            border: 1px solid #cbd5e1; font-size: 16px; box-sizing: border-box;
-        }
-        button {
-            background: #3182ce; color: white; border: none;
-            font-weight: bold; cursor: pointer; margin-top: 10px;
-        }
-        button:hover { background: #2b6cb0; }
-        .admin-btn { background: #1a202c; }
-        .admin-btn:hover { background: #2d3748; }
-        .code-list { font-family: monospace; background: #edf2f7; padding: 10px; border-radius: 4px; font-size: 14px; line-height: 1.6; }
-        .result {
-            font-size: 18px; text-align: center; font-weight: bold;
-            color: #2f855a; padding: 15px; background: #f0fff4;
-            border: 2px dashed #38a169; border-radius: 6px; margin-top: 15px;
-            display: none;
-        }
-        .pass-container {
-            margin-top: 30px;
-            border-top: 1px dashed #cbd5e1;
-            padding-top: 15px;
-            text-align: center;
-        }
-        .pass-container input {
-            padding: 8px; font-size: 14px; width: 60%; display: inline-block; margin-right: 5px;
-        }
-        .pass-container button {
-            padding: 8px 12px; font-size: 14px; width: auto; display: inline-block; margin: 0; background: #718096;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador Automático de Sesiones de Aprendizaje (CNEB)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f6f9; color: #333; }
+    .container { max-width: 950px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #1a365d; margin-bottom: 20px; }
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 9px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+    button { background-color: #2b6cb0; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+    button:hover { background-color: #2c5282; }
+    .loading { display: none; text-align: center; font-weight: bold; color: #2b6cb0; margin: 15px 0; }
+    
+    /* Estilos de la Sesión de Aprendizaje Imprimible */
+    #session-template { margin-top: 30px; display: none; background: #fff; padding: 15px; border: 1px solid #ccc; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 12px; }
+    th, td { border: 1px solid #000; padding: 6px 8px; text-align: left; vertical-align: top; }
+    .header-bg { background-color: #f0f0f0; font-weight: bold; }
+    .title-header { text-align: center; font-weight: bold; font-size: 16px; background-color: #e2e8f0; padding: 10px; border: 1px solid #000; margin-bottom: 15px; text-transform: uppercase; }
+    .btn-print { background-color: #38a169; margin-top: 20px; }
+    .btn-print:hover { background-color: #2f855a; }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; margin: 0; padding: 0; }
+      .container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; }
+      #session-template { display: block !important; border: none; padding: 0; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>🎰 Sorteo de Partes del Trabajo</h2>
-    <p style="font-size:14px; color:#718096; text-align:center;">Asignación fija, transparente y sin trucos.</p>
-
-    <!-- ZONA DEL ESTUDIANTE -->
-    <div class="zone">
-        <label>¿Vas a reclamar tus partes? ingresa tu código:</label>
-        <input type="text" id="studentCode" placeholder="Pega aquí tu código de WhatsApp" style="text-transform: uppercase;">
-        <button onclick="verificarCodigo()">🔑 Revelar Mis Partes</button>
-        <div id="resultadoEstudiante" class="result"></div>
+<div class="container">
+  <!-- FORMULARIO DE CONFIGURACIÓN -->
+  <div class="no-print">
+    <h1>Generador Automático de Sesiones de Aprendizaje</h1>
+    
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="apiKey">Clave API de Gemini:</label>
+        <input type="password" id="apiKey" placeholder="Pega tu API Key de Google AI Studio">
+      </div>
+      <div class="form-group">
+        <label for="modelName">Modelo de IA:</label>
+        <select id="modelName">
+          <option value="gemini-2.0-flash" selected>gemini-2.0-flash (Recomendado)</option>
+          <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+          <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+        </select>
+      </div>
     </div>
 
-    <!-- ZONA DEL ADMINISTRADOR (TÚ, AARON) -->
-    <div class="zone" id="adminZone" style="display: none;">
-        <label>🔧 Zona de Control (Solo Aaron):</label>
-        <p style="font-size:12px; margin:0 0 10px 0; color:#718096;">Haz clic abajo para sortear los temas manteniendo los mismos códigos fijos:</p>
-        <button class="admin-btn" onclick="ejecutarSorteoFijo()">🎰 Sortear</button>
-        <div id="listaCodigos" style="margin-top:15px; display:none;">
-            <label>Resultado del Sorteo Oficial:</label>
-            <div class="code-list" id="codigosGenerados"></div>
-        </div>
+    <div class="grid-3">
+      <div class="form-group">
+        <label for="ie">Institución Educativa:</label>
+        <input type="text" id="ie" value="CRISTO TE AMA">
+      </div>
+      <div class="form-group">
+        <label for="lugar">Lugar:</label>
+        <input type="text" id="lugar" value="TARMA">
+      </div>
+      <div class="form-group">
+        <label for="docente">Docente:</label>
+        <input type="text" id="docente" value="AARÓN SIXTO CALLUPE LLALLICO">
+      </div>
     </div>
 
-    <!-- ACCESO POR CONTRASEÑA -->
-    <div class="pass-container" id="passAccessBox">
-        <input type="password" id="adminPass" placeholder="Contraseña de administrador">
-        <button onclick="verificarPassword()">Entrar</button>
+    <div class="grid-3">
+      <div class="form-group">
+        <label for="area">Área Curricular:</label>
+        <input type="text" id="area" value="INGLES COMO LENGUA EXTRANJERA">
+      </div>
+      <div class="form-group">
+        <label for="grado">Grado / Nivel:</label>
+        <input type="text" id="grado" value="SEXTO - PRIMARIA">
+      </div>
+      <div class="form-group">
+        <label for="duracion">Duración:</label>
+        <input type="text" id="duracion" value="90 MINUTOS">
+      </div>
     </div>
+
+    <div class="form-group">
+      <label for="tema">Tema de la Sesión:</label>
+      <input type="text" id="tema" placeholder="Ejemplo: Uncountable nouns / Simple Present / Daily routines">
+    </div>
+
+    <button onclick="generarSesion()">⚡ Generar Sesión Automática</button>
+    <div id="loading" class="loading">⏳ Diseñando la sesión pedagógica con Inteligencia Artificial... Por favor espera.</div>
+  </div>
+
+  <!-- PLANTILLA DE LA SESIÓN DE APRENDIZAJE -->
+  <div id="session-template">
+    <div class="title-header">DISEÑO DE SESIÓN DE ENSEÑANZA – APRENDIZAJE</div>
+    
+    <p style="font-weight: bold; margin-bottom: 5px;">DATOS INFORMATIVOS:</p>
+    <table>
+      <tr>
+        <td width="50%"><strong>INSTITUCIÓN EDUCATIVA:</strong> <span id="out-ie"></span></td>
+        <td width="50%"><strong>LUGAR:</strong> <span id="out-lugar"></span></td>
+      </tr>
+      <tr>
+        <td><strong>ÁREA:</strong> <span id="out-area"></span></td>
+        <td><strong>GRADO/SECCIÓN:</strong> <span id="out-grado"></span> - UNICA</td>
+      </tr>
+      <tr>
+        <td><strong>BIMESTRE:</strong> II</td>
+        <td><strong>DURACIÓN:</strong> <span id="out-duracion"></span></td>
+      </tr>
+      <tr>
+        <td><strong>DOCENTE:</strong> <span id="out-docente"></span></td>
+        <td><strong>FECHA:</strong> <span id="out-fecha"></span></td>
+      </tr>
+    </table>
+
+    <p style="font-weight: bold; margin-bottom: 5px;">ELEMENTOS CURRICULARES:</p>
+    <table>
+      <tr>
+        <td colspan="3"><strong>TÍTULO DE LA UNIDAD:</strong> <span id="out-titulo-unidad"></span></td>
+      </tr>
+      <tr class="header-bg" style="text-align:center;">
+        <td width="30%"><strong>¿Qué aprenderán?</strong></td>
+        <td width="40%"><strong>¿Cómo aprenderán?</strong></td>
+        <td width="30%"><strong>¿Para qué aprenderán?</strong></td>
+      </tr>
+      <tr>
+        <td id="out-que"></td>
+        <td id="out-como"></td>
+        <td id="out-para-que"></td>
+      </tr>
+    </table>
+
+    <table>
+      <tr class="header-bg">
+        <th width="20%">COMPETENCIA</th>
+        <th width="20%">CAPACIDAD</th>
+        <th width="25%">DESEMPEÑO PRECISADO</th>
+        <th width="20%">EVIDENCIA</th>
+        <th width="15%">INSTR. DE EVAL.</th>
+      </tr>
+      <tbody id="out-evaluacion"></tbody>
+    </table>
+
+    <table>
+      <tr class="header-bg">
+        <td colspan="2"><strong>COMPETENCIAS TRANSVERSALES:</strong></td>
+      </tr>
+      <tr>
+        <td width="80%">Se desenvuelve en entornos virtuales generados por las TIC</td>
+        <td width="20%" style="text-align: center;">X</td>
+      </tr>
+      <tr>
+        <td>Gestiona su aprendizaje de manera autónoma</td>
+        <td style="text-align: center;">X</td>
+      </tr>
+    </table>
+
+    <table>
+      <tr class="header-bg">
+        <td colspan="2"><strong>ENFOQUE TRANSVERSAL DESARROLLADO:</strong> <span id="out-enfoque-nombre"></span></td>
+      </tr>
+      <tr>
+        <td width="30%"><strong>VALOR:</strong> <span id="out-enfoque-valor"></span></td>
+        <td width="70%"><strong>ACTITUD:</strong> <span id="out-enfoque-actitud"></span></td>
+      </tr>
+    </table>
+
+    <p style="font-weight: bold; margin-bottom: 5px;">SECUENCIA DIDÁCTICA:</p>
+    <table>
+      <tr class="header-bg">
+        <th width="10%">FASES</th>
+        <th width="20%">PROCESOS</th>
+        <th width="45%">ACTIVIDADES / ESTRATEGIAS</th>
+        <th width="15%">MATERIALES</th>
+        <th width="10%">TIEMPO</th>
+      </tr>
+      <tr>
+        <td style="text-align: center; vertical-align: middle;"><strong>INICIO</strong></td>
+        <td>Motivación, Problematización, Saberes Previos, Propósito y Organización</td>
+        <td id="out-inicio-act"></td>
+        <td id="out-inicio-mat"></td>
+        <td style="text-align: center;">10 min</td>
+      </tr>
+      <tr>
+        <td style="text-align: center; vertical-align: middle;"><strong>PROCESO</strong></td>
+        <td>Gestión y acompañamiento del desarrollo de las competencias</td>
+        <td id="out-proceso-act"></td>
+        <td id="out-proceso-mat"></td>
+        <td style="text-align: center;">70 min</td>
+      </tr>
+      <tr>
+        <td style="text-align: center; vertical-align: middle;"><strong>SALIDA</strong></td>
+        <td>Evaluación y Metacognición</td>
+        <td id="out-salida-act"></td>
+        <td id="out-salida-mat"></td>
+        <td style="text-align: center;">10 min</td>
+      </tr>
+    </table>
+
+    <br><br><br>
+    <div style="text-align: center;">
+      ____________________________________________<br>
+      <span id="out-firma-docente" style="font-weight: bold;"></span><br>
+      DOCENTE
+    </div>
+
+    <button class="no-print btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+  </div>
 </div>
 
 <script>
-    // Estructuras principales fijas
-    const nombresGrupo = ["Kiara", "Angie", "Ariana", "Estefany", "Aaron"];
-    const partes = [
-        "Partes 1 y 2",
-        "Partes 3 y 4",
-        "Partes 5 y 6",
-        "Partes 7 y 8",
-        "Partes 9 y 10"
-    ];
+async function generarSesion() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const modelName = document.getElementById('modelName').value;
+  const tema = document.getElementById('tema').value.trim();
+  const area = document.getElementById('area').value.trim();
+  const grado = document.getElementById('grado').value.trim();
+  const loading = document.getElementById('loading');
 
-    // Códigos fijos precalculados matemáticamente: Kiara=513, Angie=613, Ariana=713, Estefany=813, Aaron=913
-    const codigosFijos = [513, 613, 713, 813, 913];
+  if (!apiKey || !tema) {
+    alert("Por favor ingresa la clave API de Gemini y el Tema de la sesión.");
+    return;
+  }
+
+  loading.style.display = 'block';
+
+  const prompt = `Eres un especialista pedagógico del Currículo Nacional de la Educación Básica (CNEB) de Perú. Genera el contenido estructurado para una sesión de aprendizaje sobre el siguiente tema:
+  Tema: "${tema}"
+  Área: "${area}"
+  Grado: "${grado}"
+
+  Responde ÚNICAMENTE en formato JSON válido con la siguiente estructura exacta:
+  {
+    "titulo_unidad": "Título contextualizado adecuado para la unidad pedagógica",
+    "proposito": {
+      "que_aprenderan": "Descripción clara del objeto de aprendizaje",
+      "como_aprenderan": "Explicación detallada de la estrategia de enseñanza y ejemplos clave del tema",
+      "para_que_aprenderan": "Utilidad práctica y contexto del aprendizaje para la vida real o académica"
+    },
+    "evaluacion": [
+      {
+        "competencia": "Nombre oficial de una competencia del CNEB del área",
+        "capacidad": "Nombre oficial de la capacidad correspondiente",
+        "desempeno_precisado": "Desempeño precisado ajustado al tema y grado",
+        "evidencia": "Evidencia concreta producto o desempeño",
+        "instrumento": "Rúbrica o Lista de cotejo"
+      }
+    ],
+    "enfoque_transversal": {
+      "nombre": "Enfoque transversal del CNEB (Ejemplo: Enfoque de derechos, Enfoque intercultural, etc.)",
+      "valor": "Valor asociado al enfoque",
+      "actitud": "Descripción de la actitud observable docente-estudiante"
+    },
+    "secuencia_didactica": {
+      "inicio": {
+        "actividades": "Estrategias de motivación, recojo de saberes previos, problematización y presentación del propósito.",
+        "materiales": "- Lluvia de ideas\\n- Tarjetas o imágenes"
+      },
+      "proceso": {
+        "actividades": "Estrategias de desarrollo conceptual, ejercicios guiados, práctica grupal o en parejas y retroalimentación.",
+        "materiales": "- Diapositivas\\n- Imágenes\\n- Fichas"
+      },
+      "salida": {
+        "actividades": "Preguntas de metacognición (¿Qué aprendimos?, ¿Cómo lo aprendimos?, ¿Para qué nos sirve?) y cierre.",
+        "materiales": "- Cuaderno"
+      }
+    }
+  }`;
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json" }
+      })
+    });
+
+    if (!response.ok) {
+      const errorJson = await response.json();
+      throw new Error(`Error ${response.status}: ${errorJson.error?.message || 'Error al conectar con la API.'}`);
+    }
+
+    const data = await response.json();
+    let resultText = data.candidates[0].content.parts[0].text;
     
-    // Aquí guardaremos el resultado del sorteo en la sesión actual
-    let ordenAsignadoGlobal = [];
+    // Limpieza de formato markdown (en caso la API devuelva ```json ... ```)
+    resultText = resultText.replace(/```json/gi, '').replace(/```/g, '').trim();
+    const sessionData = JSON.parse(resultText);
 
-    // Validar contraseña
-    function verificarPassword() {
-        const pass = document.getElementById("adminPass").value;
-        if (pass === "callupe16") {
-            document.getElementById("adminZone").style.display = "block";
-            document.getElementById("passAccessBox").style.display = "none";
-        } else {
-            alert("Contraseña incorrecta de Administrador.");
-        }
-    }
+    // Llenar datos informativos de cabecera
+    document.getElementById('out-ie').innerText = document.getElementById('ie').value;
+    document.getElementById('out-lugar').innerText = document.getElementById('lugar').value;
+    document.getElementById('out-area').innerText = area;
+    document.getElementById('out-grado').innerText = grado;
+    document.getElementById('out-duracion').innerText = document.getElementById('duracion').value;
+    document.getElementById('out-docente').innerText = document.getElementById('docente').value;
+    document.getElementById('out-firma-docente').innerText = document.getElementById('docente').value;
+    
+    const hoy = new Date();
+    document.getElementById('out-fecha').innerText = `${hoy.getDate()} DE ${hoy.toLocaleString('es-ES', { month: 'long' }).toUpperCase()}`;
 
-    // Ejecuta el sorteo mezclando partes sin alterar los códigos de los alumnos
-    function ejecutarSorteoFijo() {
-        ordenAsignadoGlobal = [...partes];
-        // Algoritmo Fisher-Yates para mezclar de forma aleatoria transparente
-        for (let i = ordenAsignadoGlobal.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [ordenAsignadoGlobal[i], ordenAsignadoGlobal[j]] = [ordenAsignadoGlobal[j], ordenAsignadoGlobal[i]];
-        }
+    // Llenar propósito y unidad
+    document.getElementById('out-titulo-unidad').innerText = sessionData.titulo_unidad;
+    document.getElementById('out-que').innerText = sessionData.proposito.que_aprenderan;
+    document.getElementById('out-como').innerText = sessionData.proposito.como_aprenderan;
+    document.getElementById('out-para-que').innerText = sessionData.proposito.para_que_aprenderan;
 
-        let htmlText = "";
-        for(let i = 0; i < nombresGrupo.length; i++) {
-            htmlText += `<b>${nombresGrupo[i]}</b> (SRT-${codigosFijos[i]}) -> 🟢 ${ordenAsignadoGlobal[i]}<br>`;
-        }
+    // Llenar tabla de evaluación
+    const evalTbody = document.getElementById('out-evaluacion');
+    evalTbody.innerHTML = '';
+    sessionData.evaluacion.forEach(item => {
+      const row = `<tr>
+        <td>${item.competencia}</td>
+        <td>${item.capacidad}</td>
+        <td>${item.desempeno_precisado}</td>
+        <td>${item.evidencia}</td>
+        <td>${item.instrumento}</td>
+      </tr>`;
+      evalTbody.innerHTML += row;
+    });
 
-        document.getElementById("codigosGenerados").innerHTML = htmlText;
-        document.getElementById("listaCodigos").style.display = "block";
-    }
+    // Llenar enfoque transversal
+    document.getElementById('out-enfoque-nombre').innerText = sessionData.enfoque_transversal.nombre;
+    document.getElementById('out-enfoque-valor').innerText = sessionData.enfoque_transversal.valor;
+    document.getElementById('out-enfoque-actitud').innerText = sessionData.enfoque_transversal.actitud;
 
-    function verificarCodigo() {
-        let codigoRaw = document.getElementById("studentCode").value.trim().toUpperCase();
-        let resultDiv = document.getElementById("resultadoEstudiante");
+    // Llenar secuencia didáctica
+    document.getElementById('out-inicio-act').innerText = sessionData.secuencia_didactica.inicio.actividades;
+    document.getElementById('out-inicio-mat').innerText = sessionData.secuencia_didactica.inicio.materiales;
 
-        if (ordenAsignadoGlobal.length === 0) {
-            alert("Aaron aún no ha presionado el botón 'Sortear' en la zona de control.");
-            return;
-        }
+    document.getElementById('out-proceso-act').innerText = sessionData.secuencia_didactica.proceso.actividades;
+    document.getElementById('out-proceso-mat').innerText = sessionData.secuencia_didactica.proceso.materiales;
 
-        if(!codigoRaw.startsWith("SRT-")) {
-            alert("Formato incorrecto. Recuerda incluir el 'SRT-', por ejemplo: SRT-513");
-            return;
-        }
+    document.getElementById('out-salida-act').innerText = sessionData.secuencia_didactica.salida.actividades;
+    document.getElementById('out-salida-mat').innerText = sessionData.secuencia_didactica.salida.materiales;
 
-        let numero = parseInt(codigoRaw.replace("SRT-", ""));
-        
-        // Buscamos a quién le pertenece ese número fijo
-        let alumnoIndex = codigosFijos.indexOf(numero);
+    // Mostrar el resultado final
+    document.getElementById('session-template').style.display = 'block';
 
-        if(alumnoIndex === -1) {
-            resultDiv.style.display = "block";
-            resultDiv.style.background = "#fff5f5";
-            resultDiv.style.borderColor = "#e53e3e";
-            resultDiv.style.color = "#c53030";
-            resultDiv.textContent = "❌ Código inválido. Verifica que esté bien escrito.";
-            return;
-        }
-
-        // Extraemos la parte correspondiente según el sorteo actual
-        let parteLeida = ordenAsignadoGlobal[alumnoIndex];
-
-        // Mostrar resultado limpio y personalizado
-        resultDiv.style.display = "block";
-        resultDiv.style.background = "#f0fff4";
-        resultDiv.style.borderColor = "#38a169";
-        resultDiv.style.color = "#2f855a";
-        resultDiv.innerHTML = `👤 Hola, <b>${nombresGrupo[alumnoIndex]}</b><br>🎉 Te corresponde trabajar:<br>✨ <b>${parteLeida}</b> ✨`;
-    }
+  } catch (err) {
+    console.error(err);
+    alert(`Ocurrió un problema: ${err.message}`);
+  } finally {
+    loading.style.display = 'none';
+  }
+}
 </script>
 
 </body>
