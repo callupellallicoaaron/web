@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Galaxia de flores amarillas A12🌻</title>
     <style>
         * {
@@ -10,6 +10,12 @@
             padding: 0;
             box-sizing: border-box;
             touch-action: none; /* Previene scroll no deseado en celulares */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none; /* Deshabilita la selección de texto */
+            -webkit-touch-callout: none; /* Deshabilita menú emergente en dispositivos táctiles */
+            -webkit-tap-highlight-color: transparent; /* Elimina recuadro azul al tocar en móviles */
         }
 
         body {
@@ -45,6 +51,8 @@
             background: radial-gradient(circle, rgba(20,10,35,0.95) 0%, rgba(3,1,8,1) 100%);
             transition: opacity 1.2s ease, visibility 1.2s;
             cursor: pointer;
+            padding: 20px;
+            text-align: center;
         }
 
         .flower-btn {
@@ -58,7 +66,6 @@
             align-items: center;
             font-size: 80px;
             animation: pulse 2s infinite alternate;
-            user-select: none;
             cursor: pointer;
         }
 
@@ -79,7 +86,7 @@
         /* Cartel con la Frase Principal */
         #main-title-card {
             position: absolute;
-            top: 5%;
+            top: 4%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -113,7 +120,6 @@
             text-shadow: 0 0 8px #ffd700, 0 0 15px #ffaa00, 0 0 2px #000;
             pointer-events: none;
             white-space: nowrap;
-            user-select: none;
             transition: opacity 0.3s;
             transform: translate(-50%, -50%);
         }
@@ -123,13 +129,46 @@
             opacity: 0 !important;
             visibility: hidden !important;
         }
+
+        /* Adaptabilidad Responsive para celulares */
+        @media (max-width: 600px) {
+            .flower-btn {
+                width: 120px;
+                height: 120px;
+                font-size: 60px;
+            }
+
+            .tap-instruction {
+                font-size: 1.05rem;
+                margin-top: 18px;
+            }
+
+            #main-title-card {
+                top: 2.5%;
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 1.35rem;
+            }
+
+            p.subtitle {
+                font-size: 0.8rem;
+                line-height: 1.25;
+            }
+
+            .galaxy-text {
+                font-size: 10px;
+                text-shadow: 0 0 6px #ffd700, 0 0 10px #ffaa00, 0 0 2px #000;
+            }
+        }
     </style>
 
     <!-- Libres de Three.js y OrbitControls para interacción con dedo/mouse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <!-- Pantalla Inicial -->
     <div id="start-screen">
@@ -373,6 +412,9 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
+        // Prevenir la selección de texto e inspección mediante atajos o toque sostenido
+        document.addEventListener('selectstart', (e) => e.preventDefault());
 
         // Inicializar
         initScene();
