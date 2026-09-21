@@ -1,101 +1,382 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
- <head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260814-05-a1b2e7b","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YAHO2-t-jNE,0","Arial":"YAGyDvJ_4Ts,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Canva Sans":"YAFLd8sKbwc,2","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAHO2VMiyZo,0","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAEul-FRQw4,0","Georgia":"YAGzXkO0pEM,0","Helvetica Neue":"YAFcf6CtJfI,0","Impact":"YAFcfnjI7Vk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YAHO2a5g66Q,0","JetBrains Mono":"YAFdJksXcAk,0","Libre Baskerville":"YACgEUFdPdA,0","Manrope":"YAHO2b2feC4,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YADLjI9qxTA,0","Nunito":"YACgEX8C5Gg,0","Oleo Script":"YACgEQQ14jI,0","Phantom Sans":"YAHO2E8Pb88,0","Playfair Display":"YACgEYmuCJE,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YADWjpfPmdk,0","Raleway":"YACgEVg3xZg,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Spectral":"YAHO2rVUHIM,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Ubuntu":"YACgERDU--Q,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YADlN8CFZ8Q,0","ui-sans-serif":"YACkoN-xg4g,0"}}');</script><script src="/_sdk/7949ff62d67710d5.telemetry_sdk.js" integrity="sha512-KIvXA82Di44YY/RH9/63A9MuTuavYgDFG8PfErJn7Wli4K0LAOk+coo/aPXk3+ZNL96nHh9VYD4PE+fLes+laQ=="></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laboratorio de Neuro-Juegos Motrices</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:wght@700;900&amp;display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <style>
-    body { font-family: 'DM Sans', sans-serif; background: #f0fdf4; }
-    .heading-font { font-family: 'Fraunces', serif; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-in { animation: fadeUp 0.6s ease-out forwards; opacity: 0; }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-  </style>
-  <script src="/_sdk/0e8d3a91e1c6f495.data_sdk.js" type="text/javascript" integrity="sha512-c00oDoGjsMgluCLLEyVl3suwEkgjOGGplVFbsilUoBg4aMKNmsL3mwsc9r0dPn95qiSZyjBousQXgROkAW7p/w=="></script>
-  <script src="/_sdk/eba18683f23e5798.resizing_sdk.js" type="text/javascript" integrity="sha512-E0UWUllhwPXaNJtjyTKXWKrIE+FruPfFpO4mRmMDP2LI+U9bOizy5npCq6xx/JyWcvSK7D3TFf2wFR2Mha9kbA=="></script>
- </head>
- <body data-template-id="__page-root" class="w-full min-h-screen">
-  <header class="relative w-full overflow-hidden" style="min-height: calc(50 * min(var(--vh, 1vh), 1vh));"><img data-template-id="hero-img" class="canva-image absolute inset-0 w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/5275808/pexels-photo-5275808.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1280" alt="Three children wearing capes running joyfully in a sunny urban playground.">
-   <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-emerald-900/80"></div>
-   <div class="relative z-10 flex flex-col items-center justify-center text-center px-6 py-16" style="min-height: calc(50 * min(var(--vh, 1vh), 1vh));">
-    <p data-template-id="hero-subtitle" class="canva-text text-emerald-300 uppercase tracking-widest mb-3 animate-in font-bold text-sm">Laboratorio de Neuro-Juegos Motrices</p>
-    <h1 data-template-id="hero-title" class="canva-text heading-font text-white animate-in delay-1" style="font-size: 2.625rem; font-weight: 900;">Los Camaleones de Energía</h1>
-    <p data-template-id="hero-tagline" class="canva-text text-emerald-100 mt-4 max-w-2xl animate-in delay-2" style="font-size: 1.125rem;">Un juego motor cooperativo que potencia la flexibilidad cognitiva y la memoria de trabajo en niños de 7 a 9 años.</p>
-   </div>
-  </header>
-  <main class="w-full max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-16">
-   <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in delay-2">
-    <div data-template-id="badge-age" class="canva-card rounded-2xl p-5 flex items-center gap-4 bg-emerald-50"><i data-lucide="users" class="w-8 h-8 text-emerald-700 shrink-0"></i>
-     <div>
-      <p data-template-id="badge-age-label" class="canva-text text-xs uppercase tracking-wider text-emerald-700 font-semibold">Edad / Grado sugerido</p>
-      <p data-template-id="badge-age-value" class="canva-text font-bold text-gray-900">2.° y 3.° de Primaria (7–9 años)</p>
-     </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Galaxia de flores amarillas🌻</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: none; /* Previene scroll no deseado en celulares */
+        }
+
+        body {
+            overflow: hidden;
+            background-color: #030108;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Pantalla Inicial con el Girasol Principal */
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, rgba(20,10,35,0.95) 0%, rgba(3,1,8,1) 100%);
+            transition: opacity 1.2s ease, visibility 1.2s;
+            cursor: pointer;
+        }
+
+        .flower-btn {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffe600 0%, #ff8c00 70%, #5c3a21 100%);
+            box-shadow: 0 0 40px #ffd700, 0 0 80px rgba(255, 215, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            animation: pulse 2s infinite alternate;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 30px #ffd700; }
+            100% { transform: scale(1.1); box-shadow: 0 0 70px #ffd700, 0 0 100px #ffaa00; }
+        }
+
+        .tap-instruction {
+            margin-top: 25px;
+            font-size: 1.3rem;
+            color: #ffe680;
+            text-shadow: 0 0 10px #ffd700;
+            letter-spacing: 1px;
+            animation: fadeIn 1.5s infinite alternate;
+        }
+
+        /* Cartel con la Frase Principal */
+        #main-title-card {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 2s ease;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #ffd700;
+            font-size: 2rem;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.9), 0 0 30px rgba(255, 180, 0, 0.7);
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            font-size: 0.95rem;
+            color: #fff8d0;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Estilos de las frases 3D que flotan en el espacio */
+        .galaxy-text {
+            position: absolute;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            text-shadow: 0 0 8px #ffd700, 0 0 15px #ffaa00, 0 0 2px #000;
+            pointer-events: none;
+            white-space: nowrap;
+            user-select: none;
+            transition: opacity 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Ocultar pantalla inicial */
+        .hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+    </style>
+
+    <!-- Libres de Three.js y OrbitControls para interacción con dedo/mouse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <!-- Pantalla Inicial -->
+    <div id="start-screen">
+        <div class="flower-btn">🌻</div>
+        <div class="tap-instruction">Aure toca el girasol para ver tu galaxia✨</div>
     </div>
-    <div data-template-id="badge-cog" class="canva-card rounded-2xl p-5 flex items-center gap-4 bg-purple-50"><i data-lucide="brain" class="w-8 h-8 text-purple-700 shrink-0"></i>
-     <div>
-      <p data-template-id="badge-cog-label" class="canva-text text-xs uppercase tracking-wider text-purple-700 font-semibold">Área cognitiva potenciada</p>
-      <p data-template-id="badge-cog-value" class="canva-text font-bold text-gray-900">Flexibilidad cognitiva y Memoria de trabajo</p>
-     </div>
+
+    <!-- Título Principal Superior -->
+    <div id="main-title-card">
+        <h1>Feliz Día de las Flores Amarillas</h1>
+        <p class="subtitle">Para que te muevas y veas las frases usa tu dedo, no ses especial jeje✨🌻</p>
     </div>
-   </section>
-   <section class="animate-in delay-3">
-    <h2 data-template-id="desc-title" class="canva-text heading-font text-emerald-900 mb-4" style="font-size: 1.5rem; font-weight: 700;">Descripción de la Actividad</h2>
-    <p data-template-id="desc-text" class="canva-text text-gray-700 leading-relaxed">El juego consiste en una misión cooperativa donde los estudiantes («los camaleones») deben transportar «esferas de energía» (pelotas de trapo, conos o bolsitas de arena) desde el centro del patio hasta sus respectivas bases en las esquinas. El docente levanta una tarjeta de color y da una señal sonora; el color determina la regla de movimiento que deben aplicar para transportar la esfera en ese turno.</p>
-   </section>
-   <section>
-    <h2 data-template-id="rules-title" class="canva-text heading-font text-emerald-900 mb-6" style="font-size: 1.5rem; font-weight: 700;">Reglas por Color de Tarjeta</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-     <div data-template-id="rule-red" class="canva-card rounded-2xl p-5 border-l-4 border-red-500 bg-red-50">
-      <p data-template-id="rule-red-label" class="canva-text font-bold text-red-600 mb-1">🔴 Rojo</p>
-      <p data-template-id="rule-red-desc" class="canva-text text-gray-700 text-sm">Transportar la esfera sobre la cabeza caminando de puntillas (equilibrio estático/dinámico).</p>
-     </div>
-     <div data-template-id="rule-blue" class="canva-card rounded-2xl p-5 border-l-4 border-blue-500 bg-blue-50">
-      <p data-template-id="rule-blue-label" class="canva-text font-bold text-blue-600 mb-1">🔵 Azul</p>
-      <p data-template-id="rule-blue-desc" class="canva-text text-gray-700 text-sm">Transportar la esfera saltando con los pies juntos como canguros (fuerza explosiva).</p>
-     </div>
-     <div data-template-id="rule-green" class="canva-card rounded-2xl p-5 border-l-4 border-green-500 bg-green-50">
-      <p data-template-id="rule-green-label" class="canva-text font-bold text-green-600 mb-1">🟢 Verde</p>
-      <p data-template-id="rule-green-desc" class="canva-text text-gray-700 text-sm">Transportar la esfera desplazándose en cuadrupedia (apoyo de manos y pies sin tocar con las rodillas).</p>
-     </div>
-     <div data-template-id="rule-yellow" class="canva-card rounded-2xl p-5 border-l-4 border-yellow-500 bg-yellow-50">
-      <p data-template-id="rule-yellow-label" class="canva-text font-bold text-yellow-600 mb-1">🟡 Amarillo</p>
-      <p data-template-id="rule-yellow-desc" class="canva-text text-gray-700 text-sm">Transportar la esfera lanzándola y atrapándola en el aire mientras avanzan (coordinación óculo-manual).</p>
-     </div>
-    </div>
-   </section>
-   <section>
-    <h2 data-template-id="principles-title" class="canva-text heading-font text-emerald-900 mb-8" style="font-size: 1.5rem; font-weight: 700;">Principios Neurodidácticos Aplicados</h2>
-    <div class="mb-10 flex flex-col md:flex-row gap-6 items-center">
-     <div class="flex-1">
-      <h3 data-template-id="p1-title" class="canva-text font-bold text-gray-900 mb-2" style="font-size: 1.19rem;">1. Variabilidad en la Práctica</h3>
-      <p data-template-id="p1-text" class="canva-text text-gray-700 leading-relaxed text-sm">Se aplica el principio de los Sistemas Dinámicos de Bernstein al impedir la repetición mecánica de un solo patrón de movimiento. Cada vez que los niños buscan una esfera, el entorno cambia (las esferas van disminuyendo, hay más compañeros cruzándose) y la exigencia motriz varía constantemente gracias a las tarjetas de colores.</p>
-     </div>
-    </div>
-    <div class="mb-10 flex flex-col md:flex-row-reverse gap-6 items-center"><img data-template-id="p2-img" class="canva-image w-full md:w-64 h-44 object-cover rounded-2xl shrink-0" loading="lazy" src="https://images.pexels.com/photos/7207553/pexels-photo-7207553.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A joyful gym class with kids learning from a cheerful coach.">
-     <div class="flex-1">
-      <h3 data-template-id="p2-title" class="canva-text font-bold text-gray-900 mb-2" style="font-size: 1.19rem;">2. Retroalimentación Inmediata</h3>
-      <p data-template-id="p2-text" class="canva-text text-gray-700 leading-relaxed text-sm">Al estar todos en movimiento simultáneo, el docente interviene sobre la marcha como un «radar». Si un niño pierde la postura o no atrapa la pelota, el docente le da una corrección verbal instantánea y positiva, permitiendo que el niño ajuste su ejecución motriz cerebelosa en ese mismo instante sin detener el juego.</p>
-     </div>
-    </div>
-    <div class="flex flex-col md:flex-row gap-6 items-center"><img data-template-id="p3-img" class="canva-image w-full md:w-64 h-44 object-cover rounded-2xl shrink-0" loading="lazy" src="https://images.pexels.com/photos/35128468/pexels-photo-35128468.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Three smiling children in school uniforms jumping joyfully outdoors in summer.">
-     <div class="flex-1">
-      <h3 data-template-id="p3-title" class="canva-text font-bold text-gray-900 mb-2" style="font-size: 1.19rem;">3. Carga Dopaminérgica (Elemento Lúdico)</h3>
-      <p data-template-id="p3-text" class="canva-text text-gray-700 leading-relaxed text-sm">El juego genera alta carga de dopamina mediante el factor sorpresa (no saber qué tarjeta saldrá) y la narrativa inmersiva (son camaleones salvando su energía). Al no haber eliminados y tener un objetivo en común, se reduce el distrés y se promueve el eustrés, impulsando el sistema de recompensa del cerebro y liberando BDNF.</p>
-     </div>
-    </div>
-   </section>
-  </main>
-  <footer data-template-id="footer" class="canva-footer w-full text-center py-6 bg-emerald-950">
-   <p data-template-id="footer-text" class="canva-text text-sm text-emerald-200">Laboratorio de Neuro-Juegos Motrices · Educación Física con Neurociencia</p>
-  </footer>
-  <script src="/_sdk/a051f9537983733d.editing_sdk.js" integrity="sha512-IWn3eBHnVt7zQ0Rp79J72qSgJoLbskCA9lcfY4retf+5km4LjuhSHpvx+182KCHmEZ6EbJtWqVsybpV8Sd8PQQ=="></script>
-  <script>
-    lucide.createIcons();
-  </script>
- </body>
+
+    <!-- Contenedor 3D -->
+    <div id="canvas-container"></div>
+    <div id="text-container"></div>
+
+    <script>
+        // Listado de Frases Románticas para la Galaxia
+        const phrases = [
+            "Busca a Evangeline🌻",
+            "Nadie te frena cuando te propones algo✨",
+            "Eres mi recuerdo favorito para invocar un Patronus💛",
+            "Tienes un corazon maravilloso en un mundo lleno de muggles",
+            "Mi bella Evangeline... tan lejos y tan cerca a la vez🌟",
+            "Gracias por existir",
+            "Ni con un OBLIVIATE se me olvidaría lo buena amiga que eres💛",
+            "Ni el Felix Felicis supera la suerte de haberte conocido🧪",
+            "Tienes la fuerza de una guerrera y un corazón gigante 🌻",
+            "Eres como una flor que florece en la adversidad🌻",
+            "Admiro un montón lo fuerte y decidida que eres 🏹",
+            "Para la persona más especial ✨",
+            "Tu amistad vale mas que cualquier tesoro",
+            "Nunca dejes de sonreir, que eres hermosa 💛"
+        ];
+
+        let scene, camera, renderer, controls;
+        let galaxyGroup, pointsMesh;
+        let textElements = [];
+        let isGalaxyActive = false;
+
+        const container = document.getElementById('canvas-container');
+        const textContainer = document.getElementById('text-container');
+        const startScreen = document.getElementById('start-screen');
+        const mainTitleCard = document.getElementById('main-title-card');
+
+        function initScene() {
+            // Escena y Cámara
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 18, 30);
+
+            // Renderizador
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Controles Táctiles / Mouse
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.rotateSpeed = 0.8;
+            controls.zoomSpeed = 0.8;
+            controls.maxDistance = 60;
+            controls.minDistance = 10;
+
+            galaxyGroup = new THREE.Group();
+            scene.add(galaxyGroup);
+
+            // Creación del Núcleo Dorado
+            const coreGeo = new THREE.SphereGeometry(1.5, 32, 32);
+            const coreMat = new THREE.MeshBasicMaterial({ color: 0xffea00 });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            galaxyGroup.add(core);
+
+            // Textura de Flores Amarillas
+            const flowerTexture = createFlowerTexture();
+
+            // Galaxia de Flores y Estrellas
+            const particleCount = 3500;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            const arms = 5;
+            const radius = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                const r = Math.pow(Math.random(), 2) * radius;
+                const armIndex = i % arms;
+                const spinAngle = r * 0.9;
+                const branchAngle = ((armIndex * 2 * Math.PI) / arms) + spinAngle;
+
+                const randomX = (Math.random() - 0.5) * (r * 0.25);
+                const randomY = (Math.random() - 0.5) * (r * 0.2);
+                const randomZ = (Math.random() - 0.5) * (r * 0.25);
+
+                positions[i3] = Math.cos(branchAngle) * r + randomX;
+                positions[i3 + 1] = randomY;
+                positions[i3 + 2] = Math.sin(branchAngle) * r + randomZ;
+
+                const col = new THREE.Color();
+                if (Math.random() > 0.2) {
+                    col.setHSL(0.13 + Math.random() * 0.04, 1.0, 0.5 + Math.random() * 0.3);
+                } else {
+                    col.setHSL(0.1, 0.9, 0.85);
+                }
+
+                colors[i3] = col.r;
+                colors[i3 + 1] = col.g;
+                colors[i3 + 2] = col.b;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.9,
+                map: flowerTexture,
+                transparent: true,
+                vertexColors: true,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
+            });
+
+            pointsMesh = new THREE.Points(geometry, material);
+            galaxyGroup.add(pointsMesh);
+
+            // Generar los Textos Flotantes en 3D
+            createFloatingPhrases();
+
+            galaxyGroup.rotation.x = 0.4;
+        }
+
+        // Crear Textura 2D de Girasol para las Partículas
+        function createFlowerTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#ffd700';
+            for (let i = 0; i < 10; i++) {
+                const angle = (i * Math.PI * 2) / 10;
+                ctx.save();
+                ctx.translate(32, 32);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.ellipse(0, 12, 4, 11, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            ctx.beginPath();
+            ctx.arc(32, 32, 7, 0, Math.PI * 2);
+            ctx.fillStyle = '#4a2810';
+            ctx.fill();
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        // Colocar Frases distribuidas alrededor de la galaxia 3D
+        function createFloatingPhrases() {
+            const count = phrases.length;
+            const radius = 18;
+
+            for (let i = 0; i < count; i++) {
+                const angle = (i / count) * Math.PI * 2;
+                const r = 8 + Math.random() * radius;
+                const x = Math.cos(angle) * r;
+                const y = (Math.random() - 0.5) * 6;
+                const z = Math.sin(angle) * r;
+
+                // Crear elemento DOM para el texto
+                const el = document.createElement('div');
+                el.className = 'galaxy-text';
+                el.innerText = phrases[i];
+                textContainer.appendChild(el);
+
+                // Guardar posición 3D asociada
+                const pos = new THREE.Vector3(x, y, z);
+                galaxyGroup.add(new THREE.Mesh(
+                    new THREE.BufferGeometry(),
+                    new THREE.MeshBasicMaterial()
+                )); // Objeto ficticio para rastrear transformaciones
+
+                textElements.push({ element: el, pos: pos });
+            }
+        }
+
+        // Actualizar la posición de las Frases en la pantalla según la rotación de la cámara
+        function updateTextPositions() {
+            if (!isGalaxyActive) return;
+
+            textElements.forEach(item => {
+                const worldPos = item.pos.clone().applyMatrix4(galaxyGroup.matrixWorld);
+                const screenPos = worldPos.clone().project(camera);
+
+                // Comprobar si está al frente de la cámara
+                if (screenPos.z < 1) {
+                    const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
+                    const y = (-(screenPos.y * 0.5) + 0.5) * window.innerHeight;
+
+                    item.element.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+                    item.element.style.opacity = '1';
+                } else {
+                    item.element.style.opacity = '0';
+                }
+            });
+        }
+
+        // Bucle de Animación
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            if (isGalaxyActive) {
+                // Rotación automática suave de la galaxia
+                galaxyGroup.rotation.y = elapsedTime * 0.08;
+                controls.update();
+                updateTextPositions();
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Evento al Hacer Clic en el Girasol Inicial
+        startScreen.addEventListener('click', () => {
+            startScreen.classList.add('hidden');
+            mainTitleCard.style.opacity = '1';
+            isGalaxyActive = true;
+        });
+
+        // Reajuste cuando se gira el teléfono o cambia el tamaño
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Inicializar
+        initScene();
+        animate();
+    </script>
+</body>
 </html>
