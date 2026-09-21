@@ -115,56 +115,33 @@
         .galaxy-text {
             position: absolute;
             color: #fff;
-            font-size: 13px;
-            font-weight: 600;
-            text-shadow: 0 0 8px #ffd700, 0 0 15px #ffaa00, 0 0 2px #000;
+            font-size: 16px;
+            font-weight: 700;
+            text-shadow: 0 0 10px #ffd700, 0 0 18px #ffaa00, 0 0 4px #000;
             pointer-events: none;
             white-space: nowrap;
+            user-select: none;
             transition: opacity 0.3s;
             transform: translate(-50%, -50%);
         }
 
-        /* Ocultar pantalla inicial */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            p.subtitle { font-size: 0.85rem; }
+            .flower-btn { width: 130px; height: 130px; font-size: 65px; }
+            .tap-instruction { font-size: 1.1rem; }
+            .galaxy-text { 
+                font-size: 18px; 
+                text-shadow: 0 0 12px #ffd700, 0 0 20px #ffaa00, 0 0 4px #000;
+            }
+        }
+
         .hidden {
             opacity: 0 !important;
             visibility: hidden !important;
         }
-
-        /* Adaptabilidad Responsive para celulares */
-        @media (max-width: 600px) {
-            .flower-btn {
-                width: 120px;
-                height: 120px;
-                font-size: 60px;
-            }
-
-            .tap-instruction {
-                font-size: 1.05rem;
-                margin-top: 18px;
-            }
-
-            #main-title-card {
-                top: 2.5%;
-                width: 95%;
-            }
-
-            h1 {
-                font-size: 1.35rem;
-            }
-
-            p.subtitle {
-                font-size: 0.8rem;
-                line-height: 1.25;
-            }
-
-            .galaxy-text {
-                font-size: 10px;
-                text-shadow: 0 0 6px #ffd700, 0 0 10px #ffaa00, 0 0 2px #000;
-            }
-        }
     </style>
 
-    <!-- Libres de Three.js y OrbitControls para interacción con dedo/mouse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
@@ -365,16 +342,27 @@
         function updateTextPositions() {
             if (!isGalaxyActive) return;
 
+            const isMobile = window.innerWidth <= 600;
+            // Aumentamos el tamaño base para móviles a 19px y 16px en escritorio
+            const baseFontSize = isMobile ? 19 : 16;
+
             textElements.forEach(item => {
                 const worldPos = item.pos.clone().applyMatrix4(galaxyGroup.matrixWorld);
+                const distToCamera = camera.position.distanceTo(worldPos);
                 const screenPos = worldPos.clone().project(camera);
 
-                // Comprobar si está al frente de la cámara
                 if (screenPos.z < 1) {
                     const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
                     const y = (-(screenPos.y * 0.5) + 0.5) * window.innerHeight;
 
+                    // Escala dinámica optimizada para que las frases crezcan al acercar la cámara en el teléfono
+                    let dynamicScale = (32 / distToCamera);
+                    dynamicScale = Math.max(0.85, Math.min(dynamicScale, 2.0));
+
+                    const currentFontSize = baseFontSize * dynamicScale;
+
                     item.element.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+                    item.element.style.fontSize = `${currentFontSize.toFixed(1)}px`;
                     item.element.style.opacity = '1';
                 } else {
                     item.element.style.opacity = '0';
@@ -382,7 +370,6 @@
             });
         }
 
-        // Bucle de Animación
         const clock = new THREE.Clock();
         function animate() {
             requestAnimationFrame(animate);
