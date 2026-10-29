@@ -1,420 +1,1207 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Galaxia de flores amarillas A12🌻</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEAI - Guardianes Digitales | I.E.P. "Cristo te ama"</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        eco: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        },
+                        tech: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            touch-action: none; /* Previene scroll o zoom nativo no deseado en celulares */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none; /* Deshabilita la selección de texto en PC y Móvil */
-            -webkit-touch-callout: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        /* Estilos personalizados Eco-Digitales */
         body {
-            overflow: hidden;
-            background-color: #030108;
-            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
-            color: #fff;
-            width: 100vw;
-            height: 100vh;
+            background-color: #f8fafc;
+            color: #0f172a;
+            overflow-x: hidden;
         }
 
-        #canvas-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
+        .hero-bg {
+            background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.25) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.25) 0%, transparent 50%),
+                        linear-gradient(135deg, #022c22 0%, #064e3b 50%, #0f172a 100%);
+            position: relative;
         }
 
-        /* Capa exclusiva de textos flotantes por encima del Canvas 3D */
-        #text-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            overflow: hidden;
+        .cyber-grid {
+            background-image: linear-gradient(to right, rgba(52, 211, 153, 0.07) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(52, 211, 153, 0.07) 1px, transparent 1px);
+            background-size: 36px 36px;
         }
 
-        /* Pantalla Inicial con el Girasol Principal */
-        #start-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 30;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.18);
+        }
+
+        .glass-dark {
+            background: rgba(6, 78, 59, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(52, 211, 153, 0.25);
+        }
+
+        /* Animación de ondas de sonido para los Podcasts */
+        .sound-wave {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background: radial-gradient(circle, rgba(20,10,35,0.96) 0%, rgba(3,1,8,1) 100%);
-            transition: opacity 1.2s ease, visibility 1.2s;
-            cursor: pointer;
-            padding: 20px;
-            text-align: center;
+            gap: 3px;
+            height: 24px;
+        }
+        .sound-wave span {
+            display: block;
+            width: 4px;
+            height: 6px;
+            background: linear-gradient(to top, #10b981, #22d3ee);
+            border-radius: 4px;
+            transition: height 0.2s ease;
+        }
+        .playing .sound-wave span {
+            animation: wave 1s infinite ease-in-out;
+        }
+        .playing .sound-wave span:nth-child(2) { animation-delay: 0.1s; }
+        .playing .sound-wave span:nth-child(3) { animation-delay: 0.2s; }
+        .playing .sound-wave span:nth-child(4) { animation-delay: 0.3s; }
+        .playing .sound-wave span:nth-child(5) { animation-delay: 0.4s; }
+        .playing .sound-wave span:nth-child(6) { animation-delay: 0.2s; }
+        .playing .sound-wave span:nth-child(7) { animation-delay: 0.5s; }
+        .playing .sound-wave span:nth-child(8) { animation-delay: 0.15s; }
+
+        @keyframes wave {
+            0%, 100% { height: 6px; }
+            50% { height: 24px; }
         }
 
-        .flower-btn {
-            width: clamp(110px, 25vw, 160px);
-            height: clamp(110px, 25vw, 160px);
-            border-radius: 50%;
-            background: radial-gradient(circle, #ffe600 0%, #ff8c00 70%, #5c3a21 100%);
-            box-shadow: 0 0 35px #ffd700, 0 0 70px rgba(255, 215, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: clamp(50px, 12vw, 80px);
-            animation: pulse 2s infinite alternate;
-            cursor: pointer;
+        /* Animación suave para elementos flotantes */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: floatSlow 4s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 25px #ffd700; }
-            100% { transform: scale(1.08); box-shadow: 0 0 60px #ffd700, 0 0 90px #ffaa00; }
+        /* Scrollbar estética */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 8px;
         }
-
-        .tap-instruction {
-            margin-top: 20px;
-            font-size: clamp(1rem, 4vw, 1.3rem);
-            color: #ffe680;
-            text-shadow: 0 0 10px #ffd700;
-            letter-spacing: 0.5px;
-            animation: fadeIn 1.5s infinite alternate;
-            padding: 0 10px;
+        ::-webkit-scrollbar-track {
+            background: #022c22;
         }
-
-        /* Cartel con la Frase Principal */
-        #main-title-card {
-            position: absolute;
-            top: clamp(2%, 4vh, 5%);
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            text-align: center;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 2s ease;
-            width: 92%;
-            max-width: 550px;
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 5px;
         }
-
-        h1 {
-            color: #ffd700;
-            font-size: clamp(1.2rem, 4.5vw, 2.1rem);
-            text-shadow: 0 0 12px rgba(255, 215, 0, 0.9), 0 0 25px rgba(255, 180, 0, 0.7);
-            margin-bottom: 4px;
-            line-height: 1.2;
-        }
-
-        p.subtitle {
-            font-size: clamp(0.75rem, 2.8vw, 0.95rem);
-            color: #fff8d0;
-            text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
-            line-height: 1.3;
-        }
-
-        .galaxy-text {
-            position: absolute;
-            color: #ffffff;
-            font-size: clamp(12px, 3.2vw, 16px);
-            font-weight: 700;
-            text-shadow: 0 0 8px #ffd700, 0 0 16px #ff8c00, 0 0 3px #000;
-            pointer-events: none;
-            white-space: nowrap;
-            transition: opacity 0.3s ease;
-            transform: translate(-50%, -50%);
-            
-            /* Cápsula de lectura para evitar solapamiento con los girasoles */
-            background: rgba(10, 4, 22, 0.75);
-            padding: clamp(4px, 1.2vw, 7px) clamp(8px, 2.5vw, 14px);
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.8), 0 0 6px rgba(255, 215, 0, 0.2);
-            max-width: 88vw;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .hidden {
-            opacity: 0 !important;
-            visibility: hidden !important;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
         }
     </style>
-
-    <!-- Libres de Three.js y OrbitControls -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
-<body oncontextmenu="return false;">
+<body class="antialiased selection:bg-eco-500 selection:text-white">
 
-    <!-- Pantalla Inicial -->
-    <div id="start-screen">
-        <div class="flower-btn">🌻</div>
-        <div class="tap-instruction">Aure toca el girasol para ver tu galaxia✨</div>
+    <!-- ==========================================
+         1. PORTADA DE INICIO (HERO)
+    =========================================== -->
+    <section id="inicio" class="hero-bg text-white relative overflow-hidden py-14 sm:py-20 lg:py-24 border-b-4 border-eco-500">
+        <!-- Patrón de cuadrícula digital de fondo -->
+        <div class="absolute inset-0 cyber-grid pointer-events-none"></div>
+
+        <!-- Decoraciones de luz ambiental -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-eco-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-tech-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            
+            <!-- Bloque Superior: Nombre de la Institución + Insignia al costado -->
+            <div class="inline-flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 bg-white/10 backdrop-blur-md border border-white/20 px-6 sm:px-10 py-4 rounded-3xl shadow-2xl mb-8 animate-float">
+                <div class="text-center sm:text-right">
+                    <span class="text-xs uppercase tracking-[0.25em] text-eco-300 font-semibold block mb-1">Institución Educativa Privada</span>
+                    <h2 class="font-display font-black text-2xl sm:text-4xl md:text-5xl tracking-tight text-white drop-shadow">
+                        I.E.P. "Cristo te ama"
+                    </h2>
+                </div>
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-eco-400 to-tech-400 rounded-full blur opacity-70 group-hover:opacity-100 transition"></div>
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBkuh-qRfc6HX1h6DoLQwGY7wFz2Z0qK4DoHC7qnt3nYPVO-csjLh6qz1JKYzT-ut2rC4tQZGwJDWfl_0xpD2v-0dl6QWo9VQ9t1r2avXI7CdsSffZ0gKYRNp0eCdX3xkOV8_UwMa-zyg-vr-Dr-GdFF2jzmCLHyMOQtrrQLHPy4UY4rkPRrKiZICoZPw/s1600/INSIGNIA-CTA.png" 
+                         alt="Insignia Oficial I.E.P. Cristo te ama" 
+                         class="relative w-20 h-20 sm:w-24 sm:h-24 object-contain bg-white rounded-2xl p-2 shadow-xl"
+                         onerror="this.src='https://placehold.co/120x120/ffffff/047857?text=INSIGNIA'">
+                </div>
+            </div>
+
+            <!-- Título Principal: PEAI -->
+            <div class="mb-6">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-eco-500/20 border border-eco-400/40 text-eco-300 text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3">
+                    <i class="fa-solid fa-seedling animate-bounce"></i> Proyecto Educativo Ambiental Integrado <i class="fa-solid fa-microchip text-tech-400"></i>
+                </div>
+                <h1 class="font-display font-black text-6xl sm:text-7xl md:text-8xl tracking-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-eco-200 to-tech-300 drop-shadow-lg leading-none">
+                    PEAI
+                </h1>
+            </div>
+
+            <!-- Subtítulo Oficial del Proyecto debajo de PEAI -->
+            <div class="max-w-4xl mx-auto glass-dark rounded-3xl p-6 sm:p-8 shadow-2xl border border-eco-400/30 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-eco-400 to-tech-400"></div>
+                <div class="absolute top-0 right-0 w-2 h-full bg-gradient-to-b from-tech-400 to-eco-400"></div>
+                
+                <div class="flex justify-center gap-3 mb-3 text-eco-300 text-xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <i class="fa-solid fa-box-open"></i>
+                    <i class="fa-solid fa-tower-broadcast text-tech-400"></i>
+                    <i class="fa-solid fa-earth-americas"></i>
+                </div>
+
+                <h3 class="font-display font-extrabold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white leading-snug tracking-wide">
+                    “GUARDIANES DIGITALES: CAJAS ECOLÓGICAS DE ALERTA AMBIENTAL Y CONCIENTIZACIÓN COMUNITARIA”
+                </h3>
+                
+                <p class="mt-4 text-eco-100/90 text-sm sm:text-base max-w-2xl mx-auto font-normal leading-relaxed">
+                    Bienvenidos a nuestra plataforma interactiva de divulgación ambiental. Explora nuestros banners informativos, material audiovisual y episodios de podcast creados para transformar y proteger nuestra comunidad mediante la educación y la tecnología ecológica.
+                </p>
+            </div>
+
+            <!-- Botones de Acceso Rápido a los Recursos -->
+            <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+                <a href="#banners" class="group bg-white/10 hover:bg-eco-600/80 border border-white/20 hover:border-eco-300 rounded-2xl p-4 transition-all duration-300 flex items-center gap-4 text-left shadow-lg">
+                    <div class="w-12 h-12 rounded-xl bg-eco-500/30 group-hover:bg-white/20 flex items-center justify-center text-2xl text-eco-300 group-hover:text-white transition">
+                        <i class="fa-solid fa-images"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-eco-300 font-semibold uppercase tracking-wider block">Galería Visual</span>
+                        <span class="font-bold text-lg text-white">11 Banners Informativos</span>
+                    </div>
+                </a>
+
+                <a href="#videos" class="group bg-white/10 hover:bg-tech-600/80 border border-white/20 hover:border-tech-300 rounded-2xl p-4 transition-all duration-300 flex items-center gap-4 text-left shadow-lg">
+                    <div class="w-12 h-12 rounded-xl bg-tech-500/30 group-hover:bg-white/20 flex items-center justify-center text-2xl text-tech-400 group-hover:text-white transition">
+                        <i class="fa-solid fa-circle-play"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-tech-300 font-semibold uppercase tracking-wider block">Videoteca PEAI</span>
+                        <span class="font-bold text-lg text-white">12 Videos Educativos</span>
+                    </div>
+                </a>
+
+                <a href="#podcasts" class="group bg-white/10 hover:bg-amber-600/80 border border-white/20 hover:border-amber-300 rounded-2xl p-4 transition-all duration-300 flex items-center gap-4 text-left shadow-lg">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/30 group-hover:bg-white/20 flex items-center justify-center text-2xl text-amber-300 group-hover:text-white transition">
+                        <i class="fa-solid fa-podcast"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-amber-300 font-semibold uppercase tracking-wider block">Zona Podcast</span>
+                        <span class="font-bold text-lg text-white">3 Audios Ambientales</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         2. SECCIÓN: 11 BANNERS INFORMATIVOS
+    =========================================== -->
+    <section id="banners" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Encabezado de Sección -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+            <div>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-eco-100 text-eco-800 text-xs font-bold uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-signs-post text-eco-600"></i> Exposición Visual Informativa
+                </div>
+                <h2 class="font-display font-black text-3xl sm:text-4xl text-slate-900 tracking-tight">
+                    Galería de <span class="text-eco-600">Banners Ecológicos</span> (11)
+                </h2>
+                <p class="mt-2 text-slate-600 max-w-2xl text-sm sm:text-base">
+                    Recorre nuestras 11 infografías y paneles sobre el funcionamiento de las <strong>Cajas Ecológicas de Alerta Ambiental</strong> y la labor de los Guardianes Digitales. Haz clic en cualquier banner para ampliarlo a pantalla completa.
+                </p>
+            </div>
+
+            <!-- Controles de Vista (Cuadrícula vs Presentación) -->
+            <div class="flex items-center gap-2 bg-slate-200/80 p-1.5 rounded-2xl self-start">
+                <button id="btnGridView" onclick="switchBannerView('grid')" class="px-4 py-2 rounded-xl text-sm font-bold bg-white text-eco-800 shadow-sm transition flex items-center gap-2">
+                    <i class="fa-solid fa-border-all"></i> Vista Galería (11)
+                </button>
+                <button id="btnSlideView" onclick="switchBannerView('slider')" class="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:text-slate-900 transition flex items-center gap-2">
+                    <i class="fa-solid fa-panorama"></i> Modo Presentación
+                </button>
+            </div>
+        </div>
+
+        <!-- MODO PRESENTACIÓN / CARRUSEL (Oculto por defecto, activable con 1 clic) -->
+        <div id="bannerSliderContainer" class="hidden mb-12 bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-eco-500/30">
+            <div class="grid grid-cols-1 lg:grid-cols-12">
+                <div class="lg:col-span-8 bg-black/60 relative min-h-[340px] sm:min-h-[480px] flex items-center justify-center p-4">
+                    <img id="sliderActiveImg" src="baner 1.jpeg" alt="Banner Activo" 
+                         class="max-h-[480px] w-auto object-contain rounded-xl shadow-lg cursor-zoom-in"
+                         onclick="openLightbox(currentSliderIndex)"
+                         onerror="handleBannerError(this, currentSliderIndex + 1)">
+                    
+                    <!-- Botones Anterior / Siguiente -->
+                    <button onclick="changeSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 hover:bg-eco-500 text-white backdrop-blur-md flex items-center justify-center transition shadow-lg">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button onclick="changeSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 hover:bg-eco-500 text-white backdrop-blur-md flex items-center justify-center transition shadow-lg">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="lg:col-span-4 p-6 sm:p-8 flex flex-col justify-between text-white bg-gradient-to-b from-eco-950 to-slate-900">
+                    <div>
+                        <span id="sliderBadge" class="inline-block px-3 py-1 rounded-full bg-eco-500/20 text-eco-300 border border-eco-500/30 text-xs font-bold mb-3">
+                            BANNER 01 DE 11
+                        </span>
+                        <h3 id="sliderTitle" class="font-display font-bold text-2xl text-white mb-3"></h3>
+                        <p id="sliderDesc" class="text-slate-300 text-sm leading-relaxed mb-6"></p>
+                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-eco-200 flex items-center gap-3">
+                            <i class="fa-regular fa-file-image text-xl text-eco-400"></i>
+                            <div>
+                                <span class="block text-slate-400">Archivo vinculado:</span>
+                                <code id="sliderFilename" class="font-bold text-white">baner 1.jpeg</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                        <button onclick="openLightbox(currentSliderIndex)" class="w-full py-3 rounded-xl bg-eco-500 hover:bg-eco-400 text-slate-950 font-bold text-sm transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> Ver Banner en Pantalla Completa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUADRÍCULA DE LOS 11 BANNERS -->
+        <div id="bannersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+            <!-- Se genera dinámicamente por JS para mantener limpio y organizado cada uno de los 11 banners -->
+        </div>
+    </section>
+
+    <!-- ==========================================
+         3. SECCIÓN: 12 VIDEOS EDUCATIVOS
+    =========================================== -->
+    <section id="videos" class="py-16 sm:py-20 bg-slate-900 text-white relative overflow-hidden">
+        <!-- Decoración de fondo -->
+        <div class="absolute inset-0 cyber-grid opacity-40 pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Encabezado de Videoteca -->
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-tech-500/20 border border-tech-400/30 text-tech-400 text-xs font-bold uppercase tracking-widest mb-3">
+                    <i class="fa-solid fa-video"></i> Producción Audiovisual Escolar
+                </div>
+                <h2 class="font-display font-black text-3xl sm:text-5xl text-white tracking-tight">
+                    Videoteca <span class="text-transparent bg-clip-text bg-gradient-to-r from-eco-400 to-tech-400">Guardianes Digitales</span> (12)
+                </h2>
+                <p class="mt-3 text-slate-300 text-sm sm:text-base">
+                    Explora nuestra serie completa de 12 videos documentales e informativos sobre la creación, implementación e impacto de las Cajas Ecológicas de Alerta Ambiental.
+                </p>
+            </div>
+
+            <!-- REPRODUCTOR CINE PRINCIPAL (THEATER MODE) -->
+            <div class="bg-slate-950/90 border border-eco-500/30 rounded-3xl overflow-hidden shadow-2xl mb-12">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    <!-- Pantalla de Video Principal -->
+                    <div class="lg:col-span-8 bg-black relative flex flex-col justify-center">
+                        <div class="aspect-video w-full bg-slate-950 relative overflow-hidden flex items-center justify-center">
+                            <video id="mainVideoPlayer" controls preload="metadata" class="w-full h-full object-contain z-10">
+                                <source id="mainVideoSrcMp4" src="video1.mp4" type="video/mp4">
+                                <source id="mainVideoSrcRaw" src="video1" type="video/mp4">
+                                <source id="mainVideoSrcWebm" src="video1.webm" type="video/webm">
+                                Tu navegador no soporta la reproducción de video HTML5.
+                            </video>
+                        </div>
+                        <!-- Barra inferior del reproductor -->
+                        <div class="bg-slate-900/90 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 border-t border-white/10">
+                            <div class="flex items-center gap-2 text-xs sm:text-sm text-eco-300 font-semibold">
+                                <span class="w-2.5 h-2.5 rounded-full bg-eco-400 animate-ping"></span>
+                                Reproduciendo ahora: <strong id="theaterFileBadge" class="text-white bg-white/10 px-2 py-0.5 rounded">video1 (video1.mp4)</strong>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="prevNextVideo(-1)" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-eco-600 text-xs font-bold transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-backward-step"></i> Anterior
+                                </button>
+                                <button onclick="prevNextVideo(1)" class="px-3 py-1.5 rounded-lg bg-eco-500 hover:bg-eco-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5">
+                                    Siguiente <i class="fa-solid fa-forward-step"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información del Video Seleccionado + Lista Rápida -->
+                    <div class="lg:col-span-4 p-6 sm:p-8 flex flex-col justify-between bg-gradient-to-b from-slate-900 via-slate-900 to-eco-950/60">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span id="theaterNumberBadge" class="px-3 py-1 rounded-full bg-tech-500/20 text-tech-300 border border-tech-400/30 text-xs font-bold">
+                                    VIDEO 01 DE 12
+                                </span>
+                                <span id="theaterCategory" class="text-xs font-semibold text-eco-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-check"></i> Oficial PEAI
+                                </span>
+                            </div>
+
+                            <h3 id="theaterTitle" class="font-display font-extrabold text-xl sm:text-2xl text-white mb-3 leading-snug">
+                                Video 1: Presentación Oficial del Proyecto Guardianes Digitales
+                            </h3>
+
+                            <p id="theaterDesc" class="text-slate-300 text-sm leading-relaxed mb-6">
+                                Introducción general al Proyecto Educativo Ambiental Integrado (PEAI) de la I.E.P. "Cristo te ama" y cómo la tecnología se une al cuidado de nuestra creación.
+                            </p>
+
+                            <!-- Puntos clave del video -->
+                            <div class="bg-white/5 rounded-2xl p-4 border border-white/10 space-y-2 mb-6">
+                                <div class="text-xs font-bold uppercase tracking-wider text-eco-300 mb-1">
+                                    <i class="fa-solid fa-list-check mr-1"></i> Propósito Informativo:
+                                </div>
+                                <p id="theaterKeyPoint" class="text-xs text-slate-300 leading-relaxed">
+                                    Conocer la visión ecológica de nuestros estudiantes y el impacto de las Cajas Ecológicas en el entorno escolar y vecinal.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-white/10">
+                            <p class="text-xs text-slate-400 mb-3">
+                                <i class="fa-solid fa-hand-pointer text-tech-400 mr-1"></i> Selecciona cualquiera de los <strong>12 videos</strong> abajo para reproducirlo en esta pantalla o directamente en su tarjeta.
+                            </p>
+                            <button onclick="document.getElementById('mainVideoPlayer').play()" class="w-full py-3 rounded-xl bg-gradient-to-r from-eco-500 to-tech-500 hover:from-eco-400 hover:to-tech-400 text-slate-950 font-extrabold text-sm shadow-lg transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-play"></i> Reproducir Video Seleccionado
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUADRÍCULA DE LOS 12 VIDEOS -->
+            <div id="videosGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Generado dinámicamente por JS para los 12 videos (video1 a video12) -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         4. SECCIÓN: 3 AUDIOS TIPO PODCAST (.OGG)
+    =========================================== -->
+    <section id="podcasts" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Encabezado de Sección Podcast -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-widest mb-3">
+                <i class="fa-solid fa-podcast text-amber-600"></i> Estación Sonora Escolar
+            </div>
+            <h2 class="font-display font-black text-3xl sm:text-4xl text-slate-900 tracking-tight">
+                Podcast <span class="text-eco-600">“Voces Verdes en Alerta”</span> (3 Episodios)
+            </h2>
+            <p class="mt-2 text-slate-600 text-sm sm:text-base">
+                Escucha nuestros 3 episodios de podcast en formato <code class="bg-slate-200 px-1.5 py-0.5 rounded text-slate-800 font-semibold">.ogg</code> donde reflexionamos, explicamos y concientizamos a toda la comunidad sobre el cuidado ambiental.
+            </p>
+        </div>
+
+        <!-- Tarjetas de los 3 Podcasts -->
+        <div id="podcastsContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Generado dinámicamente por JS para audio1.ogg, audio2.ogg y audio3.ogg -->
+        </div>
+    </section>
+
+    <!-- ==========================================
+         5. SORPRESA POTENCIADORA + CONCLUSIÓN
+    =========================================== -->
+    <section id="compromiso" class="py-16 sm:py-20 bg-gradient-to-br from-eco-950 via-eco-900 to-slate-950 text-white relative overflow-hidden">
+        <!-- Luces decorativas -->
+        <div class="absolute top-0 right-1/4 w-96 h-96 bg-eco-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-1/4 w-96 h-96 bg-tech-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <!-- Simulador Interactivo de Caja Ecológica de Alerta + Compromiso -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16">
+                
+                <!-- Columna Izquierda: Manifiesto y Frase de Conclusión -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-eco-500/20 border border-eco-400/30 text-eco-300 text-xs font-bold uppercase tracking-widest">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Reflexión Final del Proyecto PEAI
+                    </div>
+
+                    <h2 class="font-display font-black text-3xl sm:text-4xl lg:text-5xl leading-tight">
+                        Cuando la <span class="text-eco-400">Tecnología</span> escucha a la <span class="text-tech-400">Tierra</span>, nace una Comunidad Consciente.
+                    </h2>
+
+                    <blockquote class="p-6 rounded-3xl bg-white/5 border-l-4 border-eco-400 text-eco-100 italic text-base sm:text-lg leading-relaxed shadow-inner">
+                        “Cada Caja Ecológica de Alerta Ambiental instalada por nuestros Guardianes Digitales no es solo un dispositivo; es un faro de esperanza que nos recuerda que cuidar la creación de Dios es nuestra misión compartida hoy, mañana y siempre.”
+                    </blockquote>
+
+                    <!-- Indicadores de Impacto Educativo -->
+                    <div class="grid grid-cols-3 gap-4 pt-2">
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
+                            <i class="fa-solid fa-bell text-2xl text-eco-400 mb-1"></i>
+                            <div class="font-display font-black text-xl sm:text-2xl text-white">100%</div>
+                            <div class="text-xs text-slate-300">Alerta Preventiva</div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
+                            <i class="fa-solid fa-users-rays text-2xl text-tech-400 mb-1"></i>
+                            <div class="font-display font-black text-xl sm:text-2xl text-white">26</div>
+                            <div class="text-xs text-slate-300">Recursos Multimedia</div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
+                            <i class="fa-solid fa-hand-holding-heart text-2xl text-amber-400 mb-1"></i>
+                            <div id="pledgeCounterDisplay" class="font-display font-black text-xl sm:text-2xl text-white">128</div>
+                            <div class="text-xs text-slate-300">Guardianes Unidos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Tarjeta Interactiva "Conviértete en Guardián Digital" -->
+                <div class="lg:col-span-5">
+                    <div class="glass-dark rounded-3xl p-6 sm:p-8 shadow-2xl border border-eco-400/40 relative">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-eco-500/20 text-eco-300 text-xs font-bold flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-eco-400 animate-ping"></span> CAJA ECOLÓGICA ACTIVA
+                            </span>
+                            <i class="fa-solid fa-shield-heart text-2xl text-eco-400"></i>
+                        </div>
+
+                        <h3 class="font-display font-extrabold text-2xl text-white mb-2">
+                            ¡Únete como Guardián Digital!
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mb-5">
+                            Escribe tu nombre o grado para generar tu insignia digital de compromiso con el cuidado del medio ambiente en la <strong>I.E.P. "Cristo te ama"</strong>.
+                        </p>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-eco-300 mb-1">Tu Nombre o Familia:</label>
+                                <input type="text" id="guardianNameInput" placeholder="Ej. Estudiante / Familia Pérez" 
+                                       class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-eco-500/40 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-eco-400">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-eco-300 mb-1">Mi Compromiso Ecológico:</label>
+                                <select id="guardianPledgeSelect" class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-eco-500/40 text-white text-sm focus:outline-none focus:border-eco-400">
+                                    <option value="Proteger las áreas verdes y atender las Cajas Ecológicas de Alerta">🌱 Proteger las áreas verdes y atender las Cajas de Alerta</option>
+                                    <option value="Practicar las 3R (Reducir, Reutilizar y Reciclar) en casa y el colegio">♻️ Practicar las 3R en mi hogar y en mi institución</option>
+                                    <option value="Compartir el mensaje de concientización comunitaria del PEAI">📢 Difundir la concientización ambiental en mi barrio</option>
+                                    <option value="Cuidar el agua, la energía y mantener limpio mi entorno">💧 Cuidar el agua, la energía y mantener limpio mi entorno</option>
+                                </select>
+                            </div>
+
+                            <button onclick="generateGuardianBadge()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-eco-500 to-tech-500 hover:from-eco-400 hover:to-tech-400 text-slate-950 font-black text-sm shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-certificate"></i> Firmar Compromiso Ambiental
+                            </button>
+                        </div>
+
+                        <!-- Credencial Generada (Oculta hasta que firme) -->
+                        <div id="guardianCertificate" class="hidden mt-6 p-4 rounded-2xl bg-gradient-to-r from-eco-900/90 to-slate-900 border-2 border-eco-400 text-center animate-fade-in">
+                            <div class="w-12 h-12 rounded-full bg-eco-500/20 border border-eco-400 flex items-center justify-center mx-auto mb-2 text-eco-300 text-xl">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <div class="text-[11px] uppercase tracking-widest text-eco-300 font-bold">Reconocimiento Oficial PEAI</div>
+                            <div id="certName" class="font-display font-black text-lg text-white mt-0.5">Guardián Digital</div>
+                            <p id="certPledge" class="text-xs text-eco-100 mt-1 italic"></p>
+                            <div class="mt-3 pt-2 border-t border-white/10 text-[11px] text-tech-300 font-semibold">
+                                <i class="fa-solid fa-check-double mr-1"></i> I.E.P. "Cristo te ama" — Guardián Registrado
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==========================================
+         6. PIE DE PÁGINA FINAL (&copy; I.E.P. Cristo te ama)
+    =========================================== -->
+    <footer class="bg-slate-950 text-slate-300 border-t border-eco-500/30 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <!-- Insignia y Nombre Institucional -->
+            <div class="flex flex-col items-center justify-center mb-6">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBkuh-qRfc6HX1h6DoLQwGY7wFz2Z0qK4DoHC7qnt3nYPVO-csjLh6qz1JKYzT-ut2rC4tQZGwJDWfl_0xpD2v-0dl6QWo9VQ9t1r2avXI7CdsSffZ0gKYRNp0eCdX3xkOV8_UwMa-zyg-vr-Dr-GdFF2jzmCLHyMOQtrrQLHPy4UY4rkPRrKiZICoZPw/s1600/INSIGNIA-CTA.png" 
+                     alt="Insignia I.E.P. Cristo te ama" 
+                     class="w-16 h-16 object-contain bg-white rounded-2xl p-1.5 shadow-lg mb-3"
+                     onerror="this.src='https://placehold.co/80x80/10b981/ffffff?text=CTA'">
+                <h4 class="font-display font-extrabold text-xl text-white">I.E.P. "Cristo te ama"</h4>
+                <p class="text-xs sm:text-sm text-eco-400 font-semibold max-w-xl mt-1">
+                    PEAI: “GUARDIANES DIGITALES: CAJAS ECOLÓGICAS DE ALERTA AMBIENTAL Y CONCIENTIZACIÓN COMUNITARIA”
+                </p>
+            </div>
+
+            <!-- Enlaces rápidos de pie de página -->
+            <div class="flex flex-wrap justify-center gap-6 text-xs font-medium text-slate-400 mb-8">
+                <a href="#inicio" class="hover:text-eco-400 transition">Portada</a>
+                <a href="#banners" class="hover:text-eco-400 transition">11 Banners</a>
+                <a href="#videos" class="hover:text-eco-400 transition">12 Videos</a>
+                <a href="#podcasts" class="hover:text-eco-400 transition">3 Audios Podcast</a>
+                <a href="#compromiso" class="hover:text-eco-400 transition">Compromiso Ambiental</a>
+            </div>
+
+            <!-- Copyright final solicitado al último último -->
+            <div class="pt-6 border-t border-slate-800/80">
+                <p class="font-display font-bold text-sm sm:text-base text-white tracking-wide">
+                    &copy; I.E.P. Cristo te ama
+                </p>
+                <p class="text-xs text-slate-500 mt-1">
+                    Todos los derechos reservados • Educación, Valores y Conciencia Ecológica
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         MODAL LIGHTBOX PARA AMPLIAR BANNERS
+    =========================================== -->
+    <div id="lightboxModal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-5 right-5 w-12 h-12 rounded-full bg-white/10 hover:bg-red-500 text-white text-xl flex items-center justify-center transition shadow-lg z-50">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <button onclick="navigateLightbox(-1)" class="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-eco-500 text-white text-xl flex items-center justify-center transition shadow-lg z-50">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="max-w-5xl w-full flex flex-col items-center">
+            <div class="bg-slate-900 p-2 sm:p-4 rounded-3xl border border-eco-500/30 shadow-2xl max-h-[78vh] flex items-center justify-center overflow-hidden">
+                <img id="lightboxImg" src="" alt="Banner Ampliado" class="max-h-[72vh] w-auto object-contain rounded-2xl">
+            </div>
+            <div class="mt-4 text-center max-w-2xl">
+                <span id="lightboxBadge" class="inline-block px-3 py-0.5 rounded-full bg-eco-500/20 text-eco-300 text-xs font-bold mb-1"></span>
+                <h4 id="lightboxTitle" class="font-display font-bold text-lg sm:text-xl text-white"></h4>
+                <p id="lightboxDesc" class="text-xs sm:text-sm text-slate-300 mt-1"></p>
+            </div>
+        </div>
+
+        <button onclick="navigateLightbox(1)" class="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-eco-500 text-white text-xl flex items-center justify-center transition shadow-lg z-50">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
     </div>
 
-    <!-- Título Principal Superior -->
-    <div id="main-title-card">
-        <h1>Feliz Día de las Flores Amarillas</h1>
-        <p class="subtitle">Para que te muevas y veas las frases usa tu dedo, no ses especial jeje✨🌻</p>
-    </div>
-
-    <!-- Contenedores 3D y de Texto -->
-    <div id="canvas-container"></div>
-    <div id="text-container"></div>
-
+    <!-- ==========================================
+         LÓGICA JAVASCRIPT DE DATOS E INTERACCIÓN
+    =========================================== -->
     <script>
-        // Prevenir selección de texto táctil y por mouse
-        document.addEventListener('selectstart', (e) => e.preventDefault());
-        document.addEventListener('dragstart', (e) => e.preventDefault());
-
-        const phrases = [
-            "Busca a Evangeline🌻",
-            "Nadie te frena cuando te propones algo✨",
-            "Eres mi recuerdo favorito para invocar un Patronus💛",
-            "Tienes un corazon maravilloso en un mundo lleno de muggles",
-            "Mi bella Evangeline... tan lejos y tan cerca a la vez🌟",
-            "Gracias por existir",
-            "Ni con un OBLIVIATE se me olvidaría lo buena amiga que eres💛",
-            "Ni el Felix Felicis supera la suerte de haberte conocido🧪",
-            "Tienes la fuerza de una guerrera y un corazón gigante 🌻",
-            "Eres como una flor que florece en la adversidad🌻",
-            "Admiro un montón lo fuerte y decidida que eres 🏹",
-            "Para la persona más especial ✨",
-            "Tu amistad vale mas que cualquier tesoro",
-            "Nunca dejes de sonreir, que eres hermosa 💛"
+        // 1. DATOS ORGANIZADOS DE LOS 11 BANNERS LOCALES (baner 1.jpeg ... baner 11.jpeg)
+        const bannersData = [
+            {
+                id: 1,
+                file: "baner 1.jpeg",
+                title: "1. ¿Quiénes somos los Guardianes Digitales?",
+                category: "Identidad PEAI",
+                icon: "fa-shield-halved",
+                desc: "Presentación de las brigadas estudiantiles de la I.E.P. 'Cristo te ama' comprometidas con la vigilancia ecológica y la innovación tecnológica."
+            },
+            {
+                id: 2,
+                file: "baner 2.jpeg",
+                title: "2. Diagnóstico y Problemática Ambiental Comunitaria",
+                category: "Diagnóstico Local",
+                icon: "fa-magnifying-glass-chart",
+                desc: "Identificación de los principales retos ambientales en nuestro entorno: acumulación de residuos, contaminación sonora y falta de alerta temprana."
+            },
+            {
+                id: 3,
+                file: "baner 3.jpeg",
+                title: "3. ¿Qué son las Cajas Ecológicas de Alerta Ambiental?",
+                category: "Innovación Verde",
+                icon: "fa-box-open",
+                desc: "Diseño y concepto de nuestras estaciones ecológicas inteligentes creadas para detectar factores de riesgo ambiental y educar al ciudadano."
+            },
+            {
+                id: 4,
+                file: "baner 4.jpeg",
+                title: "4. Arquitectura y Sensores al Servicio del Planeta",
+                category: "Tecnología Eco",
+                icon: "fa-microchip",
+                desc: "Conoce cómo funcionan los componentes internos, señaléticas preventivas y mecanismos de alerta de nuestras cajas ecológicas."
+            },
+            {
+                id: 5,
+                file: "baner 5.jpeg",
+                title: "5. Mapa de Puntos Críticos y Monitoreo Escolar",
+                category: "Vigilancia Activa",
+                icon: "fa-map-location-dot",
+                desc: "Ubicación estratégica de las Cajas Ecológicas en el colegio y zonas clave de la comunidad para maximizar su alcance informativo."
+            },
+            {
+                id: 6,
+                file: "baner 6.jpeg",
+                title: "6. Segregación Inteligente y Cultura de las 3R",
+                category: "Economía Circular",
+                icon: "fa-recycle",
+                desc: "Guía práctica visual para clasificar residuos sólidos correctamente y reducir la huella ecológica desde las aulas y los hogares."
+            },
+            {
+                id: 7,
+                file: "baner 7.jpeg",
+                title: "7. Protocolo del Sistema de Alerta Temprana",
+                category: "Prevención",
+                icon: "fa-triangle-exclamation",
+                desc: "Cómo actuar cuando una Caja Ecológica emite una alerta ambiental: pasos para estudiantes, docentes y vecinos de la localidad."
+            },
+            {
+                id: 8,
+                file: "baner 8.jpeg",
+                title: "8. Liderazgo y Acción de Nuestros Estudiantes",
+                category: "Protagonismo Escolar",
+                icon: "fa-user-graduate",
+                desc: "El rol formador de los alumnos como promotores ambientales que combinan valores cristianos y ciencia para proteger la creación."
+            },
+            {
+                id: 9,
+                file: "baner 9.jpeg",
+                title: "9. Alianza con las Familias y Vecinos",
+                category: "Concientización",
+                icon: "fa-people-roof",
+                desc: "Estrategias de sensibilización comunitaria para que cada hogar se sume a la red de cuidado ambiental de la I.E.P. 'Cristo te ama'."
+            },
+            {
+                id: 10,
+                file: "baner 10.jpeg",
+                title: "10. Indicadores de Impacto y Sostenibilidad",
+                category: "Resultados PEAI",
+                icon: "fa-chart-line",
+                desc: "Metas alcanzadas y proyección de nuestro proyecto educativo ambiental en la mejora de hábitos ecológicos de la población."
+            },
+            {
+                id: 11,
+                file: "baner 11.jpeg",
+                title: "11. Decálogo del Guardián Digital Ecológico",
+                category: "Compromiso Final",
+                icon: "fa-leaf",
+                desc: "Las 10 acciones fundamentales que todo estudiante y ciudadano debe practicar diariamente para preservar nuestro medio ambiente."
+            }
         ];
 
-        let scene, camera, renderer, controls;
-        let galaxyGroup, pointsMesh;
-        let textElements = [];
-        let isGalaxyActive = false;
+        // 2. DATOS ORGANIZADOS DE LOS 12 VIDEOS LOCALES (video1 ... video12)
+        const videosData = [
+            {
+                id: 1,
+                baseName: "video1",
+                title: "Video 1: Presentación del PEAI Guardianes Digitales",
+                duration: "Cap. 01",
+                category: "Introducción",
+                desc: "Bienvenida e introducción al proyecto 'Guardianes Digitales: Cajas Ecológicas de Alerta Ambiental y Concientización Comunitaria' de la I.E.P. Cristo te ama.",
+                keyPoint: "Comprender el propósito integrador del PEAI y su visión ecológica institucional."
+            },
+            {
+                id: 2,
+                baseName: "video2",
+                title: "Video 2: Diagnóstico Ambiental de Nuestra Localidad",
+                duration: "Cap. 02",
+                category: "Investigación",
+                desc: "Recorrido y análisis de la problemática ambiental que motivó la creación de nuestras cajas ecológicas de alerta.",
+                keyPoint: "Reconocer los puntos críticos de contaminación que afectan a nuestra comunidad."
+            },
+            {
+                id: 3,
+                baseName: "video3",
+                title: "Video 3: Diseño Conceptual de las Cajas Ecológicas",
+                duration: "Cap. 03",
+                category: "Diseño Eco",
+                desc: "Explicación del diseño, materiales sostenibles y planificación técnica de las Cajas Ecológicas de Alerta Ambiental.",
+                keyPoint: "Valorar el uso de materiales reciclables y accesibles en prototipos escolares."
+            },
+            {
+                id: 4,
+                baseName: "video4",
+                title: "Video 4: Construcción y Componentes Digitales",
+                duration: "Cap. 04",
+                category: "Tecnología",
+                desc: "Paso a paso del armado e integración de los elementos visuales y digitales que dan vida a las cajas de alerta.",
+                keyPoint: "Aprender cómo la creatividad estudiantil transforma ideas en soluciones reales."
+            },
+            {
+                id: 5,
+                baseName: "video5",
+                title: "Video 5: Demostración de la Alerta Ambiental en Vivo",
+                duration: "Cap. 05",
+                category: "Demostración",
+                desc: "Simulación práctica de cómo operan las alertas preventivas y cómo informan oportunamente a los usuarios.",
+                keyPoint: "Observar el funcionamiento real del sistema de aviso y concientización."
+            },
+            {
+                id: 6,
+                baseName: "video6",
+                title: "Video 6: Brigadas de Guardianes Digitales en Acción",
+                duration: "Cap. 06",
+                category: "Trabajo en Equipo",
+                desc: "Nuestros estudiantes organizando jornadas de vigilancia, orientación y educación ambiental dentro de la institución.",
+                keyPoint: "Destacar el liderazgo estudiantil y el trabajo colaborativo."
+            },
+            {
+                id: 7,
+                baseName: "video7",
+                title: "Video 7: Sensibilización y Entrevistas a la Comunidad",
+                duration: "Cap. 07",
+                category: "Comunidad",
+                desc: "Diálogo directo con vecinos y familias llevando el mensaje de las Cajas Ecológicas de Alerta Ambiental.",
+                keyPoint: "Conectar la escuela con el barrio para multiplicar el impacto positivo."
+            },
+            {
+                id: 8,
+                baseName: "video8",
+                title: "Video 8: Taller de Reciclaje y Segregación Escolar",
+                duration: "Cap. 08",
+                category: "Cultura 3R",
+                desc: "Actividades prácticas de reutilización y manejo adecuado de residuos sólidos complementarias a las cajas ecológicas.",
+                keyPoint: "Fomentar hábitos diarios de orden, limpieza y reciclaje responsable."
+            },
+            {
+                id: 9,
+                baseName: "video9",
+                title: "Video 9: Instalación de las Cajas en Puntos Estratégicos",
+                duration: "Cap. 09",
+                category: "Implementación",
+                desc: "Colocación y puesta en marcha de las Cajas Ecológicas en los espacios seleccionados de nuestra institución y entorno.",
+                keyPoint: "Ver cómo los espacios comunes se transforman en zonas eco-educativas."
+            },
+            {
+                id: 10,
+                baseName: "video10",
+                title: "Video 10: Monitoreo y Registro de Datos Ambientales",
+                duration: "Cap. 10",
+                category: "Ciencia Escolar",
+                desc: "Seguimiento periódico realizado por los Guardianes Digitales para evaluar las alertas y el comportamiento ambiental.",
+                keyPoint: "Integrar la investigación científica escolar en la toma de decisiones."
+            },
+            {
+                id: 11,
+                baseName: "video11",
+                title: "Video 11: Testimonios de Docentes, Alumnos y Padres",
+                duration: "Cap. 11",
+                category: "Vivencias",
+                desc: "Experiencias y aprendizajes logrados gracias al desarrollo del PEAI en la I.E.P. 'Cristo te ama'.",
+                keyPoint: "Escuchar el impacto formativo y espiritual del cuidado ambiental."
+            },
+            {
+                id: 12,
+                baseName: "video12",
+                title: "Video 12: Gran Llamado a la Conciencia Comunitaria",
+                duration: "Cap. 12",
+                category: "Cierre y Acción",
+                desc: "Mensaje final de los Guardianes Digitales invitando a todos los visitantes a ser protectores activos del planeta.",
+                keyPoint: "Asumir un compromiso personal y colectivo con la sostenibilidad."
+            }
+        ];
 
-        const container = document.getElementById('canvas-container');
-        const textContainer = document.getElementById('text-container');
-        const startScreen = document.getElementById('start-screen');
-        const mainTitleCard = document.getElementById('main-title-card');
+        // 3. DATOS ORGANIZADOS DE LOS 3 AUDIOS PODCAST (audio1.ogg, audio2.ogg, audio3.ogg)
+        const podcastsData = [
+            {
+                id: 1,
+                file: "audio1.ogg",
+                episode: "EPISODIO 01",
+                title: "Alerta Verde: Despertando la Conciencia en Nuestra Comunidad",
+                host: "Brigada Radial Guardianes Digitales",
+                icon: "fa-earth-americas",
+                desc: "En este primer episodio analizamos por qué nuestra comunidad necesita escuchar el llamado de la naturaleza y cómo nace el proyecto PEAI en la I.E.P. 'Cristo te ama'."
+            },
+            {
+                id: 2,
+                file: "audio2.ogg",
+                episode: "EPISODIO 02",
+                title: "Cajas Ecológicas Digitales: Innovación Escolar con Propósito",
+                host: "Equipo Técnico Estudiantil PEAI",
+                icon: "fa-microchip",
+                desc: "Te contamos de forma sencilla y amena cómo funcionan nuestras Cajas Ecológicas de Alerta Ambiental y cómo nos ayudan a prevenir la contaminación."
+            },
+            {
+                id: 3,
+                file: "audio3.ogg",
+                episode: "EPISODIO 03",
+                title: "Guardianes en Casa: Pequeñas Acciones que Salvan el Planeta",
+                host: "Comunidad Educativa Cristo te ama",
+                icon: "fa-seedling",
+                desc: "Consejos prácticos y reflexiones para que cada familia y vecino ponga en práctica la responsabilidad ambiental todos los días."
+            }
+        ];
 
-        function initScene() {
-            scene = new THREE.Scene();
+        // Mapa de archivos subidos manualmente si el usuario usa el botón de carga rápida
+        const uploadedBlobUrls = {};
 
-            // Ajustar el FOV para vista óptima en pantallas verticales de móviles
-            const aspect = window.innerWidth / window.innerHeight;
-            const fov = aspect < 1 ? 70 : 60;
-            camera = new THREE.PerspectiveCamera(fov, aspect, 0.1, 1000);
-            
-            // Posicionar la cámara un poco más lejos en teléfonos para ver la galaxia completa
-            const initialZ = aspect < 1 ? 36 : 30;
-            camera.position.set(0, 18, initialZ);
+        // ==========================================
+        // RENDERIZADO DE LOS 11 BANNERS
+        // ==========================================
+        let currentSliderIndex = 0;
 
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            container.appendChild(renderer.domElement);
+        function renderBanners() {
+            const grid = document.getElementById('bannersGrid');
+            grid.innerHTML = bannersData.map((b, index) => {
+                const imgSrc = uploadedBlobUrls[b.file.toLowerCase()] || b.file;
+                return `
+                <article class="glass-card rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group border border-eco-500/20">
+                    <!-- Contenedor de Imagen del Banner -->
+                    <div class="relative h-64 bg-gradient-to-br from-eco-950 via-eco-900 to-slate-900 overflow-hidden flex items-center justify-center cursor-pointer"
+                         onclick="openLightbox(${index})">
+                        
+                        <!-- Etiqueta superior -->
+                        <div class="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-eco-300 text-xs font-bold border border-eco-400/30">
+                            <i class="fa-solid ${b.icon}"></i> Banner ${b.id < 10 ? '0' + b.id : b.id}
+                        </div>
 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.rotateSpeed = aspect < 1 ? 0.6 : 0.8; // Rotación más suave en pantallas táctiles
-            controls.zoomSpeed = 0.8;
-            controls.maxDistance = 65;
-            controls.minDistance = 8;
+                        <div class="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-full bg-white/90 text-slate-900 text-[11px] font-bold shadow">
+                            <i class="fa-solid fa-expand mr-1 text-eco-600"></i> Ampliar
+                        </div>
 
-            galaxyGroup = new THREE.Group();
-            scene.add(galaxyGroup);
+                        <!-- Imagen Local: baner 1.jpeg ... baner 11.jpeg -->
+                        <img src="${imgSrc}" 
+                             alt="${b.title}" 
+                             data-banner-id="${b.id}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                             onerror="handleBannerError(this, ${b.id})">
+                    </div>
 
-            // Núcleo Dorado
-            const coreGeo = new THREE.SphereGeometry(1.5, 32, 32);
-            const coreMat = new THREE.MeshBasicMaterial({ color: 0xffea00 });
-            const core = new THREE.Mesh(coreGeo, coreMat);
-            galaxyGroup.add(core);
+                    <!-- Cuerpo Informativo de la Tarjeta -->
+                    <div class="p-6 flex-1 flex flex-col justify-between bg-white">
+                        <div>
+                            <div class="flex items-center justify-between text-xs font-semibold text-eco-700 mb-1.5">
+                                <span><i class="fa-solid fa-tag mr-1"></i> ${b.category}</span>
+                                <code class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${b.file}</code>
+                            </div>
+                            <h3 class="font-display font-bold text-lg text-slate-900 group-hover:text-eco-700 transition leading-snug mb-2">
+                                ${b.title}
+                            </h3>
+                            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                                ${b.desc}
+                            </p>
+                        </div>
 
-            // Partículas de Flores y Estrellas
-            const flowerTexture = createFlowerTexture();
-            const particleCount = window.innerWidth < 600 ? 2800 : 3500; // Optimización de rendimiento
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-            const colors = new Float32Array(particleCount * 3);
+                        <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <button onclick="openLightbox(${index})" class="text-xs font-bold text-eco-700 hover:text-eco-500 flex items-center gap-1.5">
+                                <i class="fa-solid fa-eye"></i> Visualizar infografía completa
+                            </button>
+                            <span class="w-7 h-7 rounded-full bg-eco-50 text-eco-600 flex items-center justify-center text-xs font-bold">
+                                ${b.id}
+                            </span>
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('');
 
-            const arms = 5;
-            const radius = 25;
+            updateSliderContent();
+        }
 
-            for (let i = 0; i < particleCount; i++) {
-                const i3 = i * 3;
-                const r = Math.pow(Math.random(), 2) * radius;
-                const armIndex = i % arms;
-                const spinAngle = r * 0.9;
-                const branchAngle = ((armIndex * 2 * Math.PI) / arms) + spinAngle;
+        // Generador de poster SVG elegante si el archivo local aún no está en la misma carpeta
+        function createBannerPlaceholderSVG(id) {
+            const b = bannersData[id - 1];
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+                <defs>
+                    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#022c22"/>
+                        <stop offset="50%" stop-color="#065f46"/>
+                        <stop offset="100%" stop-color="#0f172a"/>
+                    </linearGradient>
+                </defs>
+                <rect width="800" height="500" fill="url(#g)"/>
+                <circle cx="700" cy="100" r="160" fill="#10b981" opacity="0.12"/>
+                <circle cx="100" cy="420" r="180" fill="#06b6d4" opacity="0.12"/>
+                <rect x="40" y="40" width="720" height="420" rx="24" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="8,8" opacity="0.4"/>
+                <text x="400" y="150" text-anchor="middle" fill="#6ee7b7" font-family="Arial, sans-serif" font-size="22" font-weight="bold">PEAI • I.E.P. "CRISTO TE AMA"</text>
+                <text x="400" y="220" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="38" font-weight="bold">BANNER INFORMATIVO #${id}</text>
+                <text x="400" y="275" text-anchor="middle" fill="#a7f3d0" font-family="Arial, sans-serif" font-size="21">${b ? b.title : ''}</text>
+                <rect x="250" y="330" width="300" height="50" rx="12" fill="#10b981" opacity="0.25" stroke="#34d399"/>
+                <text x="400" y="362" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="20" font-weight="bold">Archivo: baner ${id}.jpeg</text>
+            </svg>`;
+            return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+        }
 
-                const randomX = (Math.random() - 0.5) * (r * 0.25);
-                const randomY = (Math.random() - 0.5) * (r * 0.2);
-                const randomZ = (Math.random() - 0.5) * (r * 0.25);
+        function handleBannerError(imgElement, id) {
+            imgElement.onerror = null;
+            imgElement.src = createBannerPlaceholderSVG(id);
+        }
 
-                positions[i3] = Math.cos(branchAngle) * r + randomX;
-                positions[i3 + 1] = randomY;
-                positions[i3 + 2] = Math.sin(branchAngle) * r + randomZ;
+        // Vista Galería vs Modo Presentación
+        function switchBannerView(mode) {
+            const sliderContainer = document.getElementById('bannerSliderContainer');
+            const btnGrid = document.getElementById('btnGridView');
+            const btnSlide = document.getElementById('btnSlideView');
 
-                const col = new THREE.Color();
-                if (Math.random() > 0.2) {
-                    col.setHSL(0.13 + Math.random() * 0.04, 1.0, 0.5 + Math.random() * 0.3);
-                } else {
-                    col.setHSL(0.1, 0.9, 0.85);
-                }
+            if (mode === 'slider') {
+                sliderContainer.classList.remove('hidden');
+                btnSlide.className = "px-4 py-2 rounded-xl text-sm font-bold bg-white text-eco-800 shadow-sm transition flex items-center gap-2";
+                btnGrid.className = "px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:text-slate-900 transition flex items-center gap-2";
+                updateSliderContent();
+            } else {
+                sliderContainer.classList.add('hidden');
+                btnGrid.className = "px-4 py-2 rounded-xl text-sm font-bold bg-white text-eco-800 shadow-sm transition flex items-center gap-2";
+                btnSlide.className = "px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:text-slate-900 transition flex items-center gap-2";
+            }
+        }
 
-                colors[i3] = col.r;
-                colors[i3 + 1] = col.g;
-                colors[i3 + 2] = col.b;
+        function changeSlide(step) {
+            currentSliderIndex = (currentSliderIndex + step + bannersData.length) % bannersData.length;
+            updateSliderContent();
+        }
+
+        function updateSliderContent() {
+            const b = bannersData[currentSliderIndex];
+            const imgEl = document.getElementById('sliderActiveImg');
+            const customSrc = uploadedBlobUrls[b.file.toLowerCase()] || b.file;
+            imgEl.onerror = function() { handleBannerError(this, b.id); };
+            imgEl.src = customSrc;
+
+            document.getElementById('sliderBadge').textContent = `BANNER ${b.id < 10 ? '0' + b.id : b.id} DE 11 • ${b.category}`;
+            document.getElementById('sliderTitle').textContent = b.title;
+            document.getElementById('sliderDesc').textContent = b.desc;
+            document.getElementById('sliderFilename').textContent = b.file;
+        }
+
+        // Funciones del Lightbox Modal
+        let currentLightboxIndex = 0;
+
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            updateLightboxModal();
+            document.getElementById('lightboxModal').classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.add('hidden');
+        }
+
+        function navigateLightbox(step) {
+            currentLightboxIndex = (currentLightboxIndex + step + bannersData.length) % bannersData.length;
+            updateLightboxModal();
+        }
+
+        function updateLightboxModal() {
+            const b = bannersData[currentLightboxIndex];
+            const img = document.getElementById('lightboxImg');
+            const src = uploadedBlobUrls[b.file.toLowerCase()] || b.file;
+            img.onerror = function() { handleBannerError(this, b.id); };
+            img.src = src;
+
+            document.getElementById('lightboxBadge').textContent = `BANNER ${b.id} DE 11 (${b.file})`;
+            document.getElementById('lightboxTitle').textContent = b.title;
+            document.getElementById('lightboxDesc').textContent = b.desc;
+        }
+
+        // ==========================================
+        // RENDERIZADO Y REPRODUCCIÓN DE LOS 12 VIDEOS
+        // ==========================================
+        let currentVideoIndex = 0;
+
+        function renderVideos() {
+            const grid = document.getElementById('videosGrid');
+            grid.innerHTML = videosData.map((v, idx) => {
+                const isSelected = idx === currentVideoIndex;
+                const customUrl = getUploadedVideoUrl(v.baseName);
+                return `
+                <div id="videoCard-${idx}" class="rounded-2xl overflow-hidden border transition-all duration-300 flex flex-col justify-between ${isSelected ? 'bg-eco-950/90 border-eco-400 ring-2 ring-eco-400/50 shadow-xl' : 'bg-slate-800/70 border-slate-700 hover:border-tech-400/60'}">
+                    <div>
+                        <!-- Mini Reproductor Individual con soporte directo a video1, video1.mp4, etc. -->
+                        <div class="relative aspect-video bg-black overflow-hidden group">
+                            <video controls preload="metadata" class="w-full h-full object-cover">
+                                ${customUrl ? `<source src="${customUrl}" type="video/mp4">` : ''}
+                                <source src="${v.baseName}.mp4" type="video/mp4">
+                                <source src="${v.baseName}" type="video/mp4">
+                                <source src="${v.baseName}.webm" type="video/webm">
+                                <source src="${v.baseName}.ogg" type="video/ogg">
+                            </video>
+                            <div class="absolute top-2.5 left-2.5 pointer-events-none px-2.5 py-0.5 rounded-full bg-slate-950/85 text-tech-300 text-[11px] font-bold border border-tech-400/30">
+                                <i class="fa-solid fa-film mr-1"></i> ${v.baseName}
+                            </div>
+                            <div class="absolute top-2.5 right-2.5 pointer-events-none px-2 py-0.5 rounded bg-eco-500 text-slate-950 text-[10px] font-extrabold uppercase">
+                                ${v.category}
+                            </div>
+                        </div>
+
+                        <!-- Detalles del Video -->
+                        <div class="p-4">
+                            <h4 class="font-display font-bold text-sm sm:text-base text-white leading-snug mb-1.5">
+                                ${v.title}
+                            </h4>
+                            <p class="text-slate-300 text-xs leading-relaxed line-clamp-3">
+                                ${v.desc}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Botón para llevar al Reproductor Principal de Cine -->
+                    <div class="px-4 pb-4 pt-2 border-t border-white/5 flex items-center justify-between gap-2">
+                        <code class="text-[11px] text-slate-400">${v.baseName}.mp4 / ${v.baseName}</code>
+                        <button onclick="selectMainVideo(${idx}, true)" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${isSelected ? 'bg-eco-400 text-slate-950' : 'bg-white/10 hover:bg-tech-500 hover:text-slate-950 text-white'}">
+                            <i class="fa-solid fa-tv"></i> ${isSelected ? 'En Pantalla' : 'Ver en Cine'}
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function getUploadedVideoUrl(baseName) {
+            const keyRaw = baseName.toLowerCase();
+            return uploadedBlobUrls[keyRaw] || uploadedBlobUrls[keyRaw + '.mp4'] || uploadedBlobUrls[keyRaw + '.webm'] || uploadedBlobUrls[keyRaw + '.mkv'] || null;
+        }
+
+        function selectMainVideo(index, autoPlay = false) {
+            currentVideoIndex = index;
+            const v = videosData[index];
+            const player = document.getElementById('mainVideoPlayer');
+            const customUrl = getUploadedVideoUrl(v.baseName);
+
+            document.getElementById('mainVideoSrcMp4').src = customUrl || `${v.baseName}.mp4`;
+            document.getElementById('mainVideoSrcRaw').src = customUrl || `${v.baseName}`;
+            document.getElementById('mainVideoSrcWebm').src = customUrl || `${v.baseName}.webm`;
+
+            player.load();
+            if (autoPlay) {
+                player.play().catch(() => {});
+                document.getElementById('videos').scrollIntoView({ behavior: 'smooth' });
             }
 
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            // Actualizar textos del modo cine
+            document.getElementById('theaterFileBadge').textContent = `${v.baseName} (${v.baseName}.mp4)`;
+            document.getElementById('theaterNumberBadge').textContent = `VIDEO ${v.id < 10 ? '0' + v.id : v.id} DE 12`;
+            document.getElementById('theaterCategory').innerHTML = `<i class="fa-solid fa-tag"></i> ${v.category}`;
+            document.getElementById('theaterTitle').textContent = v.title;
+            document.getElementById('theaterDesc').textContent = v.desc;
+            document.getElementById('theaterKeyPoint').textContent = v.keyPoint;
 
-            const material = new THREE.PointsMaterial({
-                size: window.innerWidth < 600 ? 1.1 : 0.9,
-                map: flowerTexture,
-                transparent: true,
-                vertexColors: true,
-                depthWrite: false,
-                blending: THREE.AdditiveBlending
-            });
-
-            pointsMesh = new THREE.Points(geometry, material);
-            galaxyGroup.add(pointsMesh);
-
-            createFloatingPhrases();
-            galaxyGroup.rotation.x = 0.4;
+            renderVideos();
         }
 
-        function createFlowerTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 64;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
+        function prevNextVideo(step) {
+            const nextIndex = (currentVideoIndex + step + videosData.length) % videosData.length;
+            selectMainVideo(nextIndex, true);
+        }
 
-            ctx.fillStyle = '#ffd700';
-            for (let i = 0; i < 10; i++) {
-                const angle = (i * Math.PI * 2) / 10;
-                ctx.save();
-                ctx.translate(32, 32);
-                ctx.rotate(angle);
-                ctx.beginPath();
-                ctx.ellipse(0, 12, 4, 11, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
+        // ==========================================
+        // RENDERIZADO Y REPRODUCCIÓN DE LOS 3 PODCASTS (.OGG)
+        // ==========================================
+        function renderPodcasts() {
+            const container = document.getElementById('podcastsContainer');
+            container.innerHTML = podcastsData.map((p, idx) => {
+                const audioSrc = uploadedBlobUrls[p.file.toLowerCase()] || p.file;
+                return `
+                <div id="podcastCard-${p.id}" class="glass-card rounded-3xl p-6 sm:p-7 shadow-xl border border-eco-500/25 flex flex-col justify-between relative overflow-hidden group">
+                    <!-- Decoración superior -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-eco-500/15 to-transparent rounded-bl-full pointer-events-none"></div>
+
+                    <div>
+                        <!-- Cabecera del Episodio -->
+                        <div class="flex items-center justify-between gap-2 mb-5">
+                            <span class="px-3 py-1 rounded-full bg-amber-500/15 text-amber-800 border border-amber-500/30 text-xs font-extrabold tracking-wider">
+                                <i class="fa-solid fa-microphone-lines mr-1"></i> ${p.episode}
+                            </span>
+                            <code class="text-xs font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">
+                                ${p.file}
+                            </code>
+                        </div>
+
+                        <!-- Ícono + Visualizador de Ondas -->
+                        <div class="flex items-center gap-4 mb-5 p-4 rounded-2xl bg-gradient-to-r from-eco-950 to-slate-900 text-white shadow-md">
+                            <div class="w-14 h-14 rounded-2xl bg-eco-500/20 border border-eco-400/40 flex items-center justify-center text-2xl text-eco-300 shrink-0">
+                                <i class="fa-solid ${p.icon}"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[11px] text-eco-300 font-semibold uppercase tracking-wider truncate">${p.host}</div>
+                                <div class="text-xs text-slate-300 mt-0.5 flex items-center gap-2">
+                                    <span>Frecuencia Eco-Digital</span>
+                                </div>
+                                <!-- Ondas animadas cuando el audio se reproduce -->
+                                <div class="sound-wave mt-2">
+                                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Título y Descripción del Podcast -->
+                        <h3 class="font-display font-extrabold text-lg sm:text-xl text-slate-900 mb-2 leading-snug">
+                            ${p.title}
+                        </h3>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-6">
+                            ${p.desc}
+                        </p>
+                    </div>
+
+                    <!-- Reproductor de Audio Nativo + Controles para audioX.ogg -->
+                    <div class="pt-4 border-t border-slate-200/80">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-eco-700 mb-2">
+                            <i class="fa-solid fa-headphones mr-1"></i> Escuchar Podcast (${p.file}):
+                        </label>
+                        <audio id="audioPlayer-${p.id}" controls preload="metadata" class="w-full rounded-xl"
+                               onplay="setPodcastPlaying(${p.id}, true)"
+                               onpause="setPodcastPlaying(${p.id}, false)"
+                               onended="setPodcastPlaying(${p.id}, false)">
+                            <source src="${audioSrc}" type="audio/ogg">
+                            <source src="${audioSrc}" type="audio/mpeg">
+                            Tu navegador no soporta el elemento de audio.
+                        </audio>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function setPodcastPlaying(id, isPlaying) {
+            const card = document.getElementById(`podcastCard-${id}`);
+            if (!card) return;
+            if (isPlaying) {
+                card.classList.add('playing', 'ring-2', 'ring-eco-500');
+            } else {
+                card.classList.remove('playing', 'ring-2', 'ring-eco-500');
             }
-
-            ctx.beginPath();
-            ctx.arc(32, 32, 7, 0, Math.PI * 2);
-            ctx.fillStyle = '#4a2810';
-            ctx.fill();
-
-            return new THREE.CanvasTexture(canvas);
         }
 
-        function createFloatingPhrases() {
-            const count = phrases.length;
-            const radius = 18;
+        // ==========================================
+        // INTERACCIÓN SORPRESA: GENERADOR DE CREDENCIAL GUARDIÁN DIGITAL
+        // ==========================================
+        let totalGuardians = 128;
 
-            for (let i = 0; i < count; i++) {
-                const angle = (i / count) * Math.PI * 2;
-                const r = 8 + Math.random() * radius;
-                const x = Math.cos(angle) * r;
-                const y = (Math.random() - 0.5) * 6;
-                const z = Math.sin(angle) * r;
+        function generateGuardianBadge() {
+            const nameInput = document.getElementById('guardianNameInput').value.trim();
+            const pledge = document.getElementById('guardianPledgeSelect').value;
+            const certBox = document.getElementById('guardianCertificate');
 
-                const el = document.createElement('div');
-                el.className = 'galaxy-text';
-                el.innerText = phrases[i];
-                textContainer.appendChild(el);
+            const finalName = nameInput !== "" ? nameInput : "Guardián Ambiental CTA";
+            document.getElementById('certName').textContent = finalName;
+            document.getElementById('certPledge').textContent = `“Me comprometo a: ${pledge}”`;
 
-                const pos = new THREE.Vector3(x, y, z);
-                textElements.push({ element: el, pos: pos });
-            }
+            certBox.classList.remove('hidden');
+            totalGuardians++;
+            document.getElementById('pledgeCounterDisplay').textContent = totalGuardians;
         }
 
-        function updateTextPositions() {
-            if (!isGalaxyActive) return;
-
-            const isMobile = window.innerWidth <= 600;
-
-            textElements.forEach(item => {
-                const worldPos = item.pos.clone().applyMatrix4(galaxyGroup.matrixWorld);
-                const screenPos = worldPos.clone().project(camera);
-
-                if (screenPos.z < 1) {
-                    const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
-                    const y = (-(screenPos.y * 0.5) + 0.5) * window.innerHeight;
-
-                    // Cálculo de escala adaptativo según distancia y pantalla
-                    const distToCamera = camera.position.distanceTo(worldPos);
-                    let scale = 28 / distToCamera;
-                    
-                    // Rango de escala optimizado para celulares
-                    const minScale = isMobile ? 0.75 : 0.65;
-                    const maxScale = isMobile ? 1.35 : 1.5;
-                    scale = Math.max(minScale, Math.min(scale, maxScale));
-
-                    item.element.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${scale.toFixed(2)})`;
-                    item.element.style.opacity = '1';
-                } else {
-                    item.element.style.opacity = '0';
-                }
-            });
-        }
-
-        const clock = new THREE.Clock();
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const elapsedTime = clock.getElapsedTime();
-
-            if (isGalaxyActive) {
-                galaxyGroup.rotation.y = elapsedTime * 0.08;
-                controls.update();
-                updateTextPositions();
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        startScreen.addEventListener('click', () => {
-            startScreen.classList.add('hidden');
-            mainTitleCard.style.opacity = '1';
-            isGalaxyActive = true;
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
         });
 
-        window.addEventListener('resize', () => {
-            const aspect = window.innerWidth / window.innerHeight;
-            camera.aspect = aspect;
-            camera.fov = aspect < 1 ? 70 : 60;
-            camera.updateProjectionMatrix();
-
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            if (pointsMesh && pointsMesh.material) {
-                pointsMesh.material.size = window.innerWidth < 600 ? 1.1 : 0.9;
-            }
+        // Inicializar toda la página al cargar
+        window.addEventListener('DOMContentLoaded', () => {
+            renderBanners();
+            renderVideos();
+            renderPodcasts();
         });
-
-        // Inicializar escena y bucle
-        initScene();
-        animate();
     </script>
 </body>
 </html>
